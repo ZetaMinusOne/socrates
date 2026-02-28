@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** Users get rigorous, protocol-driven reasoning on any problem without needing to know which dialectic method to apply
-**Current focus:** Phase 3 - Protocol Execution
+**Current focus:** Phase 4 - Structured Output
 
 ## Current Position
 
-Phase: 3 of 4 (Protocol Execution)
-Plan: 2 of TBD in current phase
-Status: In progress — adversarial + evaluative + ADP + multi-protocol handoff complete
-Last activity: 2026-02-28 — Phase 3 Plan 02 complete
+Phase: 4 of 4 (Structured Output)
+Plan: 1 of 1 in current phase
+Status: Complete — all phases done; --structured and --record flag support added to SKILL.md
+Last activity: 2026-02-28 — Phase 4 Plan 01 complete
 
-Progress: [█████░░░░░] 50%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 2.0 min
-- Total execution time: 0.13 hours
+- Total execution time: 0.17 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [█████░░░░░] 50%
 | 01-foundation | 2 | 5 min | 2.5 min |
 | 02-routing | 1 | 2 min | 2 min |
 | 03-protocol-execution | 2 | 2 min | 1 min |
+| 04-structured-output | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 02-01 (2 min), 03-01 (1 min), 03-02 (1 min)
+- Last 5 plans: 01-02 (3 min), 02-01 (2 min), 03-01 (1 min), 03-02 (1 min), 04-01 (2 min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -62,6 +63,11 @@ Recent decisions affecting current work:
 - Evaluative protocols have no revision loops: failed/indeterminate verdict is terminal — state this explicitly to prevent adversarial retry behavior
 - ADP persona voice resolved as third-person narrator (not first-person dialogue, not bare transcript): narrator describes each persona's argument
 - OVP → HEP handoff uses OVP's validated_observation as HEP starting point (not re-derived from original problem)
+- Flag stripping before routing: routing receives only the problem text, not the flags — keeps execution section unchanged
+- Dispute kind mapping table inline in SKILL.md: 13-row table faster than a separate file read, no extra Read calls
+- causal_ambiguity maps to candidate_selection in #Record dispute.kind with explanatory note in dispute.description
+- recording.cue read deferred to flag detection: progressive disclosure — only loaded when --record detected
+- ISO 8601 timestamps with T00:00:00Z time portion: Claude knows current date, precise wall-clock unavailable
 
 ### Pending Todos
 
@@ -74,5 +80,5 @@ None — adversarial protocol fidelity concern resolved by schema-directed execu
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 03-02-PLAN.md — evaluative, ADP exploratory, and multi-protocol handoff execution instructions added to SKILL.md
-Resume file: Next plan in phase 03, or phase 04 if phase 03 is complete
+Stopped at: Completed 04-01-PLAN.md — --structured and --record flag support added to SKILL.md; all 4 phases complete
+Resume file: None — project complete

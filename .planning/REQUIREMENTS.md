@@ -32,8 +32,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Output
 
 - [x] **OUTP-01**: User receives narrative prose by default explaining routing rationale, protocol execution steps, and conclusion
-- [ ] **OUTP-02**: User can pass `--structured` flag to get typed results matching the protocol's CUE output schema instead of narrative
-- [ ] **OUTP-03**: User can pass `--record` flag to get output formatted as a #Record compatible with governance/recording.cue (queryable audit trail)
+- [x] **OUTP-02**: User can pass `--structured` flag to get typed results matching the protocol's CUE output schema instead of narrative
+- [x] **OUTP-03**: User can pass `--record` flag to get output formatted as a #Record compatible with governance/recording.cue (queryable audit trail)
 
 ## v2 Requirements
 
@@ -81,8 +81,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXEC-04 | Phase 3 | Complete |
 | EXEC-05 | Phase 3 | Complete |
 | OUTP-01 | Phase 3 | Complete |
-| OUTP-02 | Phase 4 | Pending |
-| OUTP-03 | Phase 4 | Pending |
+| OUTP-02 | Phase 4 | Complete |
+| OUTP-03 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 16 total

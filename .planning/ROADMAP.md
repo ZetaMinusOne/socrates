@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Skill registered, submodule wired, progressive disclosure file structure in place (completed 2026-02-28)
 - [x] **Phase 2: Routing** - Auto-routing via routing.cue validated with transparent protocol selection (completed 2026-02-28)
 - [x] **Phase 3: Protocol Execution** - All 13 protocols executable with narrative output, obligation gates, and revision loop (completed 2026-02-28)
-- [ ] **Phase 4: Structured Output** - `--structured` and `--record` flags produce typed CUE-schema-compliant output
+- [x] **Phase 4: Structured Output** - `--structured` and `--record` flags produce typed CUE-schema-compliant output (completed 2026-02-28)
 
 ## Phase Details
 
@@ -71,7 +71,7 @@ Plans:
   2. User passes `--record` and receives output formatted as a #Record compatible with governance/recording.cue (queryable audit trail format)
 **Plans**: 1 plan
 Plans:
-- [ ] 04-01-PLAN.md — Add --structured and --record flag handling with structured JSON output rendering
+- [x] 04-01-PLAN.md — Add --structured and --record flag handling with structured JSON output rendering
 
 ## Progress
 
@@ -83,4 +83,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 2/2 | Complete   | 2026-02-28 |
 | 2. Routing | 1/1 | Complete    | 2026-02-28 |
 | 3. Protocol Execution | 2/2 | Complete   | 2026-02-28 |
-| 4. Structured Output | 0/1 | Not started | - |
+| 4. Structured Output | 1/1 | Complete   | 2026-02-28 |
