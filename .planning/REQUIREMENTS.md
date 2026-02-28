@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **INFRA-02**: User sees argument hint when typing `/socrates` showing expected input format
 - [x] **INFRA-03**: Git submodule wired to riverline-labs/dialectics so all .cue files are readable by Claude
 - [x] **INFRA-04**: Supporting files structure loads protocol .cue files on demand (progressive disclosure) rather than inlining all 13
-- [ ] **INFRA-05**: Protocol .cue files are optimized for agent context window — comments and non-essential content stripped to minimize token waste
+- [x] **INFRA-05**: Protocol .cue files are optimized for agent context window — comments and non-essential content stripped to minimize token waste
 
 ### Routing
 
@@ -71,7 +71,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 1 | Complete |
 | INFRA-04 | Phase 1 | Complete |
-| INFRA-05 | Phase 1 | Pending |
+| INFRA-05 | Phase 1 | Complete |
 | ROUT-01 | Phase 2 | Pending |
 | ROUT-02 | Phase 2 | Pending |
 | ROUT-03 | Phase 2 | Pending |

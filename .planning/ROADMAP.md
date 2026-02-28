@@ -12,7 +12,7 @@ Socrates ships as a Claude Code `/socrates` slash command in four strictly linea
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Skill registered, submodule wired, progressive disclosure file structure in place
+- [x] **Phase 1: Foundation** - Skill registered, submodule wired, progressive disclosure file structure in place (completed 2026-02-28)
 - [ ] **Phase 2: Routing** - Auto-routing via routing.cue validated with transparent protocol selection
 - [ ] **Phase 3: Protocol Execution** - All 13 protocols executable with narrative output, obligation gates, and revision loop
 - [ ] **Phase 4: Structured Output** - `--structured` and `--record` flags produce typed CUE-schema-compliant output
@@ -73,7 +73,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/2 | In Progress | - |
+| 1. Foundation | 2/2 | Complete   | 2026-02-28 |
 | 2. Routing | 0/TBD | Not started | - |
 | 3. Protocol Execution | 0/TBD | Not started | - |
 | 4. Structured Output | 0/TBD | Not started | - |

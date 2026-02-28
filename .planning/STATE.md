@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 1 of 4 (Foundation)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-02-28 — Completed 01-01-PLAN.md
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-02-28 — Completed 01-02-PLAN.md
 
-Progress: [█░░░░░░░░░] 10%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 2 min
-- Total execution time: 0.03 hours
+- Total plans completed: 2
+- Average duration: 2.5 min
+- Total execution time: 0.08 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 1 | 2 min | 2 min |
+| 01-foundation | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min)
-- Trend: —
+- Last 5 plans: 01-01 (2 min), 01-02 (3 min)
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -49,6 +49,8 @@ Recent decisions affecting current work:
 - Submodule placed inside skill directory (.claude/skills/socrates/dialectics) for self-contained dependency
 - Preflight check reads protocols/dialectics.opt.cue to validate both submodule AND stripped file generation
 - SKILL.md references .opt.cue paths (not raw dialectics/ paths) — raw files are source-of-truth, opt files for invocation
+- Block comment threshold: 3+ consecutive //-only lines = documentation block (stripped); 1-2 lines = semantic field description (preserved)
+- Agent instruction sections in adp.cue and rcp.cue classified as block documentation and stripped — they are usage guidance for humans, not execution semantics for Claude
 
 ### Pending Todos
 
@@ -62,5 +64,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 01-01-PLAN.md — skill registered, submodule wired, SKILL.md created. Ready for 01-02-PLAN.md (strip CUE files)
+Stopped at: Completed 01-02-PLAN.md — Phase 1 Foundation complete. strip_cue.py created, 15 .opt.cue files generated, all SKILL.md references resolve. Ready for Phase 2 (routing implementation).
 Resume file: None
