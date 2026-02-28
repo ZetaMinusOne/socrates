@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** Users get rigorous, protocol-driven reasoning on any problem without needing to know which dialectic method to apply
-**Current focus:** Phase 4 - Structured Output
+**Current focus:** Phase 5 - Schema Conformance (complete)
 
 ## Current Position
 
-Phase: 4 of 4 (Structured Output)
+Phase: 5 of 5 (Schema Conformance)
 Plan: 1 of 1 in current phase
-Status: Complete — all phases done; --structured and --record flag support added to SKILL.md
-Last activity: 2026-02-28 — Phase 4 Plan 01 complete
+Status: Complete — all phases done; schema conformance fixes applied to SKILL.md
+Last activity: 2026-02-28 — Phase 5 Plan 01 complete
 
 Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: 2.0 min
-- Total execution time: 0.17 hours
+- Total execution time: 0.20 hours
 
 **By Phase:**
 
@@ -31,9 +31,10 @@ Progress: [██████████] 100%
 | 02-routing | 1 | 2 min | 2 min |
 | 03-protocol-execution | 2 | 2 min | 1 min |
 | 04-structured-output | 1 | 2 min | 2 min |
+| 05-schema-conformance | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (3 min), 02-01 (2 min), 03-01 (1 min), 03-02 (1 min), 04-01 (2 min)
+- Last 5 plans: 02-01 (2 min), 03-01 (1 min), 03-02 (1 min), 04-01 (2 min), 05-01 (2 min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -68,6 +69,9 @@ Recent decisions affecting current work:
 - causal_ambiguity maps to candidate_selection in #Record dispute.kind with explanatory note in dispute.description
 - recording.cue read deferred to flag detection: progressive disclosure — only loaded when --record detected
 - ISO 8601 timestamps with T00:00:00Z time portion: Claude knows current date, precise wall-clock unavailable
+- CDP/ATP skip-retry resolution enums are protocol-specific: reframe_and_close (CFFP), close_as_unified (CDP), close_as_rejected (ATP)
+- General fallback rule for protocols without #Protocol type: use "n/a" for run_version with notes field explanation (currently applies to ADP only)
+- #{ACRONYM}Instance is the naming pattern for 12 of 13 protocols; ADP uses #ADPRecord (exploratory protocol exception)
 
 ### Pending Todos
 
@@ -80,5 +84,5 @@ None — adversarial protocol fidelity concern resolved by schema-directed execu
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 04-01-PLAN.md — --structured and --record flag support added to SKILL.md; all 4 phases complete
+Stopped at: Completed 05-01-PLAN.md — 5 schema-instruction fixes applied to SKILL.md; all 5 phases complete; Socrates skill is now schema-conformant
 Resume file: None — project complete

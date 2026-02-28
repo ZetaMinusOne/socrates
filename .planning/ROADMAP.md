@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Routing** - Auto-routing via routing.cue validated with transparent protocol selection (completed 2026-02-28)
 - [x] **Phase 3: Protocol Execution** - All 13 protocols executable with narrative output, obligation gates, and revision loop (completed 2026-02-28)
 - [x] **Phase 4: Structured Output** - `--structured` and `--record` flags produce typed CUE-schema-compliant output (completed 2026-02-28)
-- [ ] **Phase 5: Schema Conformance Alignment** - Fix SKILL.md instructions to match actual CUE schema definitions for resolution enums, tier labels, type references, and ADP version field
+- [x] **Phase 5: Schema Conformance Alignment** - Fix SKILL.md instructions to match actual CUE schema definitions for resolution enums, tier labels, type references, and ADP version field (completed 2026-02-28)
 
 ## Phase Details
 
@@ -86,7 +86,7 @@ Plans:
   4. SKILL.md references protocol-specific instance types (`#{ACRONYM}Instance`) instead of non-existent generic `#ProtocolInstance`
 **Plans**: 1 plan
 Plans:
-- [ ] 05-01-PLAN.md — Fix all schema-instruction mismatches in SKILL.md
+- [x] 05-01-PLAN.md — Fix all schema-instruction mismatches in SKILL.md
 
 ## Progress
 
@@ -99,4 +99,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Routing | 1/1 | Complete    | 2026-02-28 |
 | 3. Protocol Execution | 2/2 | Complete   | 2026-02-28 |
 | 4. Structured Output | 1/1 | Complete   | 2026-02-28 |
-| 5. Schema Conformance | 0/1 | Not Started | — |
+| 5. Schema Conformance | 1/1 | Complete    | 2026-02-28 |
