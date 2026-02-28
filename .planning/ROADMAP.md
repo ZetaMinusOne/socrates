@@ -42,7 +42,9 @@ Plans:
   1. User describes a problem and the skill reads governance/routing.cue, extracts structural features, and selects a protocol — without the user naming any protocol
   2. Every skill invocation shows which protocol was selected and a one-sentence rationale before execution proceeds
   3. When routing.cue identifies a composite problem, the skill sequences multiple protocols and executes them in order
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 02-01-PLAN.md — Add routing logic, display handlers, and outcome paths to SKILL.md
 
 ### Phase 3: Protocol Execution
 **Goal**: Users receive rigorous narrative reasoning for any problem, with all 13 protocols faithfully executing their CUE-schema-defined phases, obligation gates, and revision loops
@@ -74,6 +76,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-02-28 |
-| 2. Routing | 0/TBD | Not started | - |
+| 2. Routing | 0/1 | In progress | - |
 | 3. Protocol Execution | 0/TBD | Not started | - |
 | 4. Structured Output | 0/TBD | Not started | - |
