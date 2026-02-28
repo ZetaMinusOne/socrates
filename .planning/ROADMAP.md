@@ -69,7 +69,9 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User passes `--structured` and receives output in the typed format defined by the selected protocol's CUE output schema — no prose mixed in
   2. User passes `--record` and receives output formatted as a #Record compatible with governance/recording.cue (queryable audit trail format)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 04-01-PLAN.md — Add --structured and --record flag handling with structured JSON output rendering
 
 ## Progress
 
@@ -81,4 +83,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 2/2 | Complete   | 2026-02-28 |
 | 2. Routing | 1/1 | Complete    | 2026-02-28 |
 | 3. Protocol Execution | 2/2 | Complete   | 2026-02-28 |
-| 4. Structured Output | 0/TBD | Not started | - |
+| 4. Structured Output | 0/1 | Not started | - |
