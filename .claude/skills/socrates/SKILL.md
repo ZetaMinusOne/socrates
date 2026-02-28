@@ -8,12 +8,12 @@ allowed-tools: Read
 
 ## Preflight
 
-Read the file at path: `protocols/dialectics.opt.cue`
+Read the file at path: `.claude/skills/socrates/protocols/dialectics.opt.cue`
 
 If the file is not found or empty, respond exactly:
 "Setup required: the dialectics submodule is not initialized or protocol files have not been generated.
 Run: git submodule update --init --recursive
-Then check that protocols/dialectics.opt.cue exists.
+Then check that .claude/skills/socrates/protocols/dialectics.opt.cue exists.
 If missing, regenerate the optimized protocol files from the dialectics submodule."
 Stop here. Do not proceed.
 
@@ -35,38 +35,38 @@ Before routing, scan `$ARGUMENTS` for recognized flags: `--structured` and `--re
 Respond: "Please describe a problem for me to analyze."
 Stop here. Do not proceed with routing or execution.
 
-**Conditional recording.cue read:** When `--record` is detected (with or without `--structured`), read `dialectics/governance/recording.cue` to load the `#Record` type definition. Do NOT read recording.cue when `--record` is absent — follow the progressive disclosure pattern.
+**Conditional recording.cue read:** When `--record` is detected (with or without `--structured`), read `.claude/skills/socrates/dialectics/governance/recording.cue` to load the `#Record` type definition. Do NOT read recording.cue when `--record` is absent — follow the progressive disclosure pattern.
 
 ## Protocol Files
 
-Optimized (pre-stripped) protocol files are in `protocols/`. Read ONLY the file for the selected protocol. Never load all protocols at once.
+Optimized (pre-stripped) protocol files are in `.claude/skills/socrates/protocols/`. Read ONLY the file for the selected protocol. Never load all protocols at once.
 
 **Kernel and governance:**
-- Kernel primitives: `protocols/dialectics.opt.cue`
-- Routing logic: `protocols/routing.opt.cue`
+- Kernel primitives: `.claude/skills/socrates/protocols/dialectics.opt.cue`
+- Routing logic: `.claude/skills/socrates/protocols/routing.opt.cue`
 
 **Adversarial protocols (6):**
-- `protocols/adversarial/atp.opt.cue` — Analogy Transfer Protocol
-- `protocols/adversarial/cbp.opt.cue` — Concept Boundary Protocol
-- `protocols/adversarial/cdp.opt.cue` — Construct Decomposition Protocol
-- `protocols/adversarial/cffp.opt.cue` — Constraint-First Formalization Protocol
-- `protocols/adversarial/emp.opt.cue` — Emergence Mapping Protocol
-- `protocols/adversarial/hep.opt.cue` — Hypothesis Elimination Protocol
+- `.claude/skills/socrates/protocols/adversarial/atp.opt.cue` — Analogy Transfer Protocol
+- `.claude/skills/socrates/protocols/adversarial/cbp.opt.cue` — Concept Boundary Protocol
+- `.claude/skills/socrates/protocols/adversarial/cdp.opt.cue` — Construct Decomposition Protocol
+- `.claude/skills/socrates/protocols/adversarial/cffp.opt.cue` — Constraint-First Formalization Protocol
+- `.claude/skills/socrates/protocols/adversarial/emp.opt.cue` — Emergence Mapping Protocol
+- `.claude/skills/socrates/protocols/adversarial/hep.opt.cue` — Hypothesis Elimination Protocol
 
 **Evaluative protocols (6):**
-- `protocols/evaluative/aap.opt.cue` — Assumption Audit Protocol
-- `protocols/evaluative/cgp.opt.cue` — Canonical Governance Protocol
-- `protocols/evaluative/ifa.opt.cue` — Implementation Fidelity Audit
-- `protocols/evaluative/ovp.opt.cue` — Observation Validation Protocol
-- `protocols/evaluative/ptp.opt.cue` — Prioritization Triage Protocol
-- `protocols/evaluative/rcp.opt.cue` — Reconciliation Protocol
+- `.claude/skills/socrates/protocols/evaluative/aap.opt.cue` — Assumption Audit Protocol
+- `.claude/skills/socrates/protocols/evaluative/cgp.opt.cue` — Canonical Governance Protocol
+- `.claude/skills/socrates/protocols/evaluative/ifa.opt.cue` — Implementation Fidelity Audit
+- `.claude/skills/socrates/protocols/evaluative/ovp.opt.cue` — Observation Validation Protocol
+- `.claude/skills/socrates/protocols/evaluative/ptp.opt.cue` — Prioritization Triage Protocol
+- `.claude/skills/socrates/protocols/evaluative/rcp.opt.cue` — Reconciliation Protocol
 
 **Exploratory protocols (1):**
-- `protocols/exploratory/adp.opt.cue` — Adversarial Design Protocol
+- `.claude/skills/socrates/protocols/exploratory/adp.opt.cue` — Adversarial Design Protocol
 
 ## Routing
 
-Read the file at path: `protocols/routing.opt.cue`
+Read the file at path: `.claude/skills/socrates/protocols/routing.opt.cue`
 
 **Protocol full names:**
 - AAP: Assumption Audit Protocol
@@ -177,7 +177,7 @@ Never force a bad fit — an unroutable problem gets the unroutable handler, not
 
 ### Adversarial protocols (CFFP, CDP, CBP, HEP, ATP, EMP)
 
-Read the selected protocol's `.opt.cue` file (path already known from routing: `protocols/adversarial/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Do not hard-code phase sequences — let the loaded schema's type definitions drive what each phase requires.
+Read the selected protocol's `.opt.cue` file (path already known from routing: `.claude/skills/socrates/protocols/adversarial/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Do not hard-code phase sequences — let the loaded schema's type definitions drive what each phase requires.
 
 **Phase 1 — Starting conditions:** Establish the phase-appropriate starting material from the protocol's Phase1 type:
 - CFFP: invariants (each testable, structural, with an invariant class)
@@ -196,7 +196,7 @@ Eager gate: if the schema requires at least one item and none can be established
 **If derived.survivors is empty — Phase 3b (revision loop):**
 1. Summarize the failed first pass briefly: "All N candidates were eliminated because [what pressure they couldn't survive]."
 2. Identify the diagnosis label from the protocol's Phase3b diagnosis enum. State it explicitly: "Revision triggered: **[diagnosis]** — [what this means]."
-3. Check for skip-retry diagnoses: if diagnosis is `construct_incoherent` (CFFP), `construct_not_decomposable` (CDP), or `transfer_not_viable` (ATP), skip retry entirely. Apply the `reframe_and_close` resolution, explain why retrying won't help, and give the user reframe suggestions. Stop.
+3. Check for skip-retry diagnoses: if diagnosis is `construct_incoherent` (CFFP), `construct_not_decomposable` (CDP), or `transfer_not_viable` (ATP), skip retry entirely. Apply the protocol's skip-retry resolution — `reframe_and_close` for CFFP, `close_as_unified` for CDP, `close_as_rejected` for ATP — explain why retrying won't help, and give the user reframe suggestions. Stop.
 4. Otherwise: apply the resolution enum value. Re-run Phases 2–3 in full with revised parameters, showing the complete second pass output.
 5. If the second pass also produces empty survivors: report and stop. No infinite loops.
 6. HEP tracks `revision_count: uint`; CDP has `max_revisions: uint` — respect these schema-declared limits.
@@ -218,7 +218,7 @@ Special note for CDP: Phase6 produces `cffp_instructions` — conclude by tellin
 
 ### Evaluative protocols (AAP, IFA, RCP, CGP, PTP, OVP)
 
-Read the selected protocol's `.opt.cue` file (path: `protocols/evaluative/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Evaluative protocols follow a simpler arc than adversarial: establish the subject → define evaluation criteria → assess the subject against those criteria → deliver a verdict. There are no revision loops. A failed or indeterminate verdict is the terminal result — report it and stop.
+Read the selected protocol's `.opt.cue` file (path: `.claude/skills/socrates/protocols/evaluative/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Evaluative protocols follow a simpler arc than adversarial: establish the subject → define evaluation criteria → assess the subject against those criteria → deliver a verdict. There are no revision loops. A failed or indeterminate verdict is the terminal result — report it and stop.
 
 Render each phase as a section header followed by narrative prose, using the same structure as adversarial protocols. Eager gate enforcement applies: if a phase requires at least one item and none can be established from the user's problem, stop before the next phase, show completed work, state the gate diagnosis, and give actionable suggestions.
 
@@ -228,13 +228,13 @@ Render each phase as a section header followed by narrative prose, using the sam
 
 - **CGP special case:** Phase 2 activates `preservation_checks` for revision and combined cases, and `erosion_assessments` for deprecation and combined cases. Determine the governance case kind from the user's problem description (revision of an existing canonical form, deprecation of one, or both). Populate and render only the checks relevant to the case kind presented.
 
-- **AAP note:** AAP has 6 phases — subject, extraction, plausibility, stress-test, fragility map, and recommendations. Give the stress-test and fragility map phases their own section headers; the fragility map (#FragilityMap) lists assumptions by tier (load-bearing, structural, background). The recommendations phase references the tier rankings.
+- **AAP note:** AAP has 6 phases — subject, extraction, plausibility, stress-test, fragility map, and recommendations. Give the stress-test and fragility map phases their own section headers; the fragility map (#FragilityMap) lists assumptions by tier: Tier 1 (`structural`), Tier 2 (`significant`), Tier 3 (`moderate`), Tier 4 (`minor`). The recommendations phase references the tier rankings.
 
 - **PTP note:** PTP produces a ranked list with sensitivity analysis. If the top-ranked choice changes when criteria weights are perturbed, note the sensitivity in the conclusion — the ranking is weight-dependent, and the user should know which weights drive the outcome.
 
 ### Exploratory protocol (ADP)
 
-Read the protocol file at `protocols/exploratory/adp.opt.cue`. ADP's model is distinct from both adversarial and evaluative families: rather than eliminating candidates or auditing a subject, it constructs a design space through structured multi-persona debate.
+Read the protocol file at `.claude/skills/socrates/protocols/exploratory/adp.opt.cue`. ADP's model is distinct from both adversarial and evaluative families: rather than eliminating candidates or auditing a subject, it constructs a design space through structured multi-persona debate.
 
 **Execution steps:**
 
@@ -280,7 +280,7 @@ Output ONLY a JSON object. No preamble, no trailing explanation. Use a single ma
 {"protocol": "{ACRONYM}", "routed_via": "{structural_feature}", "output": {full protocol instance}}
 ```
 
-The `output` field contains ALL executed phases as JSON objects — every phase that ran appears, including Phase 3b if triggered and Phase 4 if survivors > 1. Field names and nesting follow the protocol's `#ProtocolInstance` type from its `.opt.cue` file. Challenge/rebuttal narrative text is included as string `description` fields (complete audit trail). Revision loops include both passes: `[{"pass": 1, "outcome": "all_eliminated", ...}, {"pass": 2, "outcome": "survivors", ...}]`. Evaluative protocols use the same full-phase pattern for consistency.
+The `output` field contains ALL executed phases as JSON objects — every phase that ran appears, including Phase 3b if triggered and Phase 4 if survivors > 1. Field names and nesting follow the protocol's instance type from its `.opt.cue` file: `#{ACRONYM}Instance` for all protocols except ADP, which uses `#ADPRecord`. Challenge/rebuttal narrative text is included as string `description` fields (complete audit trail). Revision loops include both passes: `[{"pass": 1, "outcome": "all_eliminated", ...}, {"pass": 2, "outcome": "survivors", ...}]`. Evaluative protocols use the same full-phase pattern for consistency.
 
 **Gate failure in structured mode** (replaces normal output entirely — no envelope wrapper):
 ```json
@@ -299,13 +299,13 @@ Early termination appends: `"early_termination": {"reason": "...", "stopped_at":
 
 ### Record output (`--record`)
 
-Project the completed run into a `#Record` JSON object from the already-loaded `dialectics/governance/recording.cue`. Same output-only JSON rule applies.
+Project the completed run into a `#Record` JSON object from the already-loaded `.claude/skills/socrates/dialectics/governance/recording.cue`. Same output-only JSON rule applies.
 
 **Field population:**
 - `record_id`: `"rec-{protocol_lower}-{YYYYMMDD}-{4-char-hex}"` (e.g., `"rec-cffp-20260228-a7f3"`)
 - `source_run.run_id`: `"{protocol_lower}-{YYYYMMDD}-{4-char-hex}"` (same suffix, no `rec-` prefix)
 - `source_run.protocol`: Protocol acronym
-- `source_run.run_version`: From `#Protocol.version` in the loaded `.opt.cue` file
+- `source_run.run_version`: From `#Protocol.version` in the loaded `.opt.cue` file. If the protocol has no `#Protocol` type (currently: ADP only), use `"n/a"` and note this in the `notes` field.
 - `source_run.subject`: User's problem text (after flag stripping)
 - `source_run.started` / `completed`: ISO 8601 using today's date, `T00:00:00Z` time portion
 - `dispute.prior_runs`: Default `[]`
