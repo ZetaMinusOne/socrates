@@ -13,7 +13,7 @@ Socrates ships as a Claude Code `/socrates` slash command in four strictly linea
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Skill registered, submodule wired, progressive disclosure file structure in place (completed 2026-02-28)
-- [ ] **Phase 2: Routing** - Auto-routing via routing.cue validated with transparent protocol selection
+- [x] **Phase 2: Routing** - Auto-routing via routing.cue validated with transparent protocol selection (completed 2026-02-28)
 - [ ] **Phase 3: Protocol Execution** - All 13 protocols executable with narrative output, obligation gates, and revision loop
 - [ ] **Phase 4: Structured Output** - `--structured` and `--record` flags produce typed CUE-schema-compliant output
 
@@ -44,7 +44,7 @@ Plans:
   3. When routing.cue identifies a composite problem, the skill sequences multiple protocols and executes them in order
 **Plans**: 1 plan
 Plans:
-- [ ] 02-01-PLAN.md — Add routing logic, display handlers, and outcome paths to SKILL.md
+- [x] 02-01-PLAN.md — Add routing logic, display handlers, and outcome paths to SKILL.md
 
 ### Phase 3: Protocol Execution
 **Goal**: Users receive rigorous narrative reasoning for any problem, with all 13 protocols faithfully executing their CUE-schema-defined phases, obligation gates, and revision loops
@@ -76,6 +76,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-02-28 |
-| 2. Routing | 0/1 | In progress | - |
+| 2. Routing | 1/1 | Complete | 2026-02-28 |
 | 3. Protocol Execution | 0/TBD | Not started | - |
 | 4. Structured Output | 0/TBD | Not started | - |

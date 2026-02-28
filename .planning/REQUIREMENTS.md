@@ -17,9 +17,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Routing
 
-- [ ] **ROUT-01**: User describes a problem and the skill automatically selects the correct protocol via governance/routing.cue structural feature matching
-- [ ] **ROUT-02**: Output includes which protocol was selected and why (protocol transparency)
-- [ ] **ROUT-03**: When routing.cue identifies a composite problem requiring multiple protocols, the skill chains them in sequence (multi-protocol sequencing)
+- [x] **ROUT-01**: User describes a problem and the skill automatically selects the correct protocol via governance/routing.cue structural feature matching
+- [x] **ROUT-02**: Output includes which protocol was selected and why (protocol transparency)
+- [x] **ROUT-03**: When routing.cue identifies a composite problem requiring multiple protocols, the skill chains them in sequence (multi-protocol sequencing)
 
 ### Protocol Execution
 
@@ -72,9 +72,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-03 | Phase 1 | Complete |
 | INFRA-04 | Phase 1 | Complete |
 | INFRA-05 | Phase 1 | Complete |
-| ROUT-01 | Phase 2 | Pending |
-| ROUT-02 | Phase 2 | Pending |
-| ROUT-03 | Phase 2 | Pending |
+| ROUT-01 | Phase 2 | Complete |
+| ROUT-02 | Phase 2 | Complete |
+| ROUT-03 | Phase 2 | Complete |
 | EXEC-01 | Phase 3 | Pending |
 | EXEC-02 | Phase 3 | Pending |
 | EXEC-03 | Phase 3 | Pending |
@@ -91,4 +91,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-02-28 after roadmap creation*
+*Last updated: 2026-02-28 after Phase 2 routing completion*
