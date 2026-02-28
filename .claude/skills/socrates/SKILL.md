@@ -201,3 +201,19 @@ If the gate fails: show all completed phases in full — the journey matters —
 **Phase 6 — Adoption (only when Phase 5 gate passes):** Produce the canonical form (CFFP), authorized parts (CDP), adopted explanation (HEP), validated transfer (ATP), or emergence map (EMP) — per the protocol's Phase6 type.
 
 Special note for CDP: Phase6 produces `cffp_instructions` — conclude by telling the user that CDP has authorized CFFP runs for each part, and they can invoke `/socrates` with the part description to begin formalization of each part individually.
+
+### Evaluative protocols (AAP, IFA, RCP, CGP, PTP, OVP)
+
+Read the selected protocol's `.opt.cue` file (path: `protocols/evaluative/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Evaluative protocols follow a simpler arc than adversarial: establish the subject → define evaluation criteria → assess the subject against those criteria → deliver a verdict. There are no revision loops. A failed or indeterminate verdict is the terminal result — report it and stop.
+
+Render each phase as a section header followed by narrative prose, using the same structure as adversarial protocols. Eager gate enforcement applies: if a phase requires at least one item and none can be established from the user's problem, stop before the next phase, show completed work, state the gate diagnosis, and give actionable suggestions.
+
+**Protocol-specific handling:**
+
+- **RCP special case:** After Phase 1 vocabulary alignment, check the `blocked` field. If `blocked: true`, CBP runs are required before conflict detection can proceed. Report the blocking terms — the homonyms that share a surface form but carry incompatible meanings across the two reasoning sessions — and stop. Instruct the user to invoke `/socrates` with each blocking term to resolve its concept boundaries via CBP, then re-run the reconciliation.
+
+- **CGP special case:** Phase 2 activates `preservation_checks` for revision and combined cases, and `erosion_assessments` for deprecation and combined cases. Determine the governance case kind from the user's problem description (revision of an existing canonical form, deprecation of one, or both). Populate and render only the checks relevant to the case kind presented.
+
+- **AAP note:** AAP has 6 phases — subject, extraction, plausibility, stress-test, fragility map, and recommendations. Give the stress-test and fragility map phases their own section headers; the fragility map (#FragilityMap) lists assumptions by tier (load-bearing, structural, background). The recommendations phase references the tier rankings.
+
+- **PTP note:** PTP produces a ranked list with sensitivity analysis. If the top-ranked choice changes when criteria weights are perturbed, note the sensitivity in the conclusion — the ranking is weight-dependent, and the user should know which weights drive the outcome.
