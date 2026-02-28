@@ -155,5 +155,49 @@ Never force a bad fit — an unroutable problem gets the unroutable handler, not
 
 ## Execution
 
-Protocol execution will be implemented in a future update. After routing completes with outcome "routed", inform the user:
-"Protocol {ACRONYM} ({Full Name}) has been selected. Execution is not yet available — it will be added in a future update."
+**Context bridge:** Begin every execution with one sentence connecting the routing decision to the protocol. Format: "Because your problem involves [problem characteristic], we'll apply [ACRONYM] — [what the protocol does in one clause]." Proceed immediately into protocol phases. No confirmation gate.
+
+**Narrative structure:** Render each protocol phase as a section header (`### Phase N: [Phase name in plain language]`) followed by narrative prose. Use protocol-specific terminology (counterexample, obligation gate, scope narrowing) with inline explanation on first use; subsequent uses are bare. Output length scales with protocol complexity — adversarial protocols produce longer output than evaluative ones. Never list schema fields directly; output is narrative prose for humans.
+
+**Eager gate enforcement:** Check phase preconditions at every transition, not only at the schema's formal Phase 5 gate. If a phase requires at least one item (the `[_, ...]` CUE constraint) and none can be established from the user's problem, stop before the next phase begins, show completed work, state the gate diagnosis, and give actionable suggestions for how the user could reframe.
+
+### Adversarial protocols (CFFP, CDP, CBP, HEP, ATP, EMP)
+
+Read the selected protocol's `.opt.cue` file (path already known from routing: `protocols/adversarial/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Do not hard-code phase sequences — let the loaded schema's type definitions drive what each phase requires.
+
+**Phase 1 — Starting conditions:** Establish the phase-appropriate starting material from the protocol's Phase1 type:
+- CFFP: invariants (each testable, structural, with an invariant class)
+- CDP: incoherence evidence (invariant conflicts, behavioral partitions, or contextual composition failures)
+- CBP: source term with documented usages across contexts
+- HEP: phenomenon with hypotheses (each with predictions and prior plausibility)
+- ATP: source construct and target domain with claimed correspondence
+- EMP: composed forms with emergence claims
+
+Eager gate: if the schema requires at least one item and none can be established from the user's problem, stop here with a gate diagnosis and suggestions.
+
+**Phase 2 — Candidates:** Generate candidates (split candidates for CDP, correspondence candidates for ATP, hypotheses already in Phase 1 for HEP). Eager gate: if at least one candidate cannot be formulated from the problem, stop with a gate diagnosis before Phase 3.
+
+**Phase 3 — Adversarial pressure:** For each candidate, generate challenges of the types the protocol's Phase3 schema defines — these vary per protocol (CFFP: `#Counterexample` and `#CompositionFailure`; CDP: boundary counterexamples, recomposition challenges, naturalness challenges; HEP: evidence rebuttals and accumulated pressure; ATP: disanalogy counterexamples, domain mismatches, scope challenges; etc.). For each challenge, evaluate whether a rebuttal holds (rebuttal kinds: `refutation`, `scope_narrowing`; note that `#CompositionFailure` in CFFP and CDP is not rebuttable). Compute derived: eliminated list (with elimination reason and source challenge id) and survivors list (with scope narrowings from valid scope-narrowing rebuttals).
+
+**If derived.survivors is empty — Phase 3b (revision loop):**
+1. Summarize the failed first pass briefly: "All N candidates were eliminated because [what pressure they couldn't survive]."
+2. Identify the diagnosis label from the protocol's Phase3b diagnosis enum. State it explicitly: "Revision triggered: **[diagnosis]** — [what this means]."
+3. Check for skip-retry diagnoses: if diagnosis is `construct_incoherent` (CFFP), `construct_not_decomposable` (CDP), or `transfer_not_viable` (ATP), skip retry entirely. Apply the `reframe_and_close` resolution, explain why retrying won't help, and give the user reframe suggestions. Stop.
+4. Otherwise: apply the resolution enum value. Re-run Phases 2–3 in full with revised parameters, showing the complete second pass output.
+5. If the second pass also produces empty survivors: report and stop. No infinite loops.
+6. HEP tracks `revision_count: uint`; CDP has `max_revisions: uint` — respect these schema-declared limits.
+
+**If derived.survivors has exactly 1:** Skip Phase 4. Proceed directly to Phase 5 with the single survivor.
+
+**If derived.survivors > 1 — Phase 4 (selection):** Select one survivor with explicit rationale per the protocol's Phase4 type. HEP's Phase4 branches: single survivor triggers a `#ConfidenceAssessment`; multiple survivors trigger discriminating experiment design — if a feasible discriminating experiment exists, execute it and re-run Phase 3 with the new evidence before proceeding.
+
+**Phase 5 — Obligation gate:** Evaluate all obligations defined in the protocol's Phase5 schema. The gate field varies by protocol:
+- CFFP: `all_provable` (using `#StaticObligation` with `provable: bool`)
+- CDP: `all_ready` (using `#PartReadiness` with `ready: bool`)
+- CBP, HEP, ATP, EMP: `all_satisfied` (using protocol-specific obligation types)
+
+If the gate fails: show all completed phases in full — the journey matters — then display a clear gate diagnosis stating which obligation failed and why, with actionable suggestions for how the user could reframe or modify input. Hard stop. No workarounds, no forcing past unmet gates.
+
+**Phase 6 — Adoption (only when Phase 5 gate passes):** Produce the canonical form (CFFP), authorized parts (CDP), adopted explanation (HEP), validated transfer (ATP), or emergence map (EMP) — per the protocol's Phase6 type.
+
+Special note for CDP: Phase6 produces `cffp_instructions` — conclude by telling the user that CDP has authorized CFFP runs for each part, and they can invoke `/socrates` with the part description to begin formalization of each part individually.
