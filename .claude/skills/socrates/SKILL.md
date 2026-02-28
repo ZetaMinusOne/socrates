@@ -23,6 +23,20 @@ If `$ARGUMENTS` is empty or blank:
 Respond: "I apply structured dialectic reasoning to your problem — from testing assumptions to mapping possibility spaces. What would you like to reason through?"
 Stop here. Do not proceed with protocol steps.
 
+## Flag Handling
+
+Before routing, scan `$ARGUMENTS` for recognized flags: `--structured` and `--record`. Both may appear together.
+
+**Flag detection:** Identify which flags are present. Store the result — it determines output rendering after execution.
+
+**Flag stripping:** Remove any detected flags from `$ARGUMENTS` before passing the remainder to routing. Routing must receive only the problem description text.
+
+**Empty-after-strip guard:** If `$ARGUMENTS` contains only flags and no problem text remains after stripping:
+Respond: "Please describe a problem for me to analyze."
+Stop here. Do not proceed with routing or execution.
+
+**Conditional recording.cue read:** When `--record` is detected (with or without `--structured`), read `dialectics/governance/recording.cue` to load the `#Record` type definition. Do NOT read recording.cue when `--record` is absent — follow the progressive disclosure pattern.
+
 ## Protocol Files
 
 Optimized (pre-stripped) protocol files are in `protocols/`. Read ONLY the file for the selected protocol. Never load all protocols at once.
