@@ -1,0 +1,3 @@
+[submodule ".claude/skills/socrates/dialectics"]
+	path = .claude/skills/socrates/dialectics
+	url = https://github.com/riverline-labs/dialectics.git
