@@ -261,3 +261,78 @@ When a composite sequence executes, show an explicit handoff section between pro
 **No redundant routing block:** When the second protocol begins, do not re-display a routing block. The composite routing overview shown before the first protocol is sufficient.
 
 **Other composite sequences:** Follow the same handoff pattern. Check the first protocol's terminal output type and map relevant fields to the second protocol's Phase 1 input type. The handoff section makes the state transfer explicit so the user can see what is being carried forward.
+
+## Output Rendering
+
+After protocol execution completes (or stops at a gate), render output based on the flags detected in Flag Handling:
+
+- **No flags detected:** Use narrative prose (existing behavior). No further action needed.
+- **`--structured` detected:** Render structured JSON output (see below).
+- **`--record` detected:** Render `#Record` JSON output (see below).
+- **Both detected:** Render combined: `{"structured": {protocol output envelope}, "record": {#Record}}`.
+
+### Structured output (`--structured`)
+
+Output ONLY a JSON object. No preamble, no trailing explanation. Use a single markdown code fence (` ```json ... ``` `) as the formatting wrapper only — no text outside it.
+
+**Single protocol envelope:**
+```json
+{"protocol": "{ACRONYM}", "routed_via": "{structural_feature}", "output": {full protocol instance}}
+```
+
+The `output` field contains ALL executed phases as JSON objects — every phase that ran appears, including Phase 3b if triggered and Phase 4 if survivors > 1. Field names and nesting follow the protocol's `#ProtocolInstance` type from its `.opt.cue` file. Challenge/rebuttal narrative text is included as string `description` fields (complete audit trail). Revision loops include both passes: `[{"pass": 1, "outcome": "all_eliminated", ...}, {"pass": 2, "outcome": "survivors", ...}]`. Evaluative protocols use the same full-phase pattern for consistency.
+
+**Gate failure in structured mode** (replaces normal output entirely — no envelope wrapper):
+```json
+{"outcome": "gate_failed", "gate": "{gate description}", "completed_phases": [...], "suggestions": [...]}
+```
+
+**Composite sequence format:**
+```json
+{"sequence": [{"protocol": "...", "routed_via": "...", "output": {...}}, ...]}
+```
+Early termination appends: `"early_termination": {"reason": "...", "stopped_at": "...", "suggested_next": "..."}`.
+
+**Ambiguous routing with `--structured`:** Ask the clarifying question in plain text (not JSON) — structured output requires a selected protocol. After clarification and successful re-routing, apply the flag to the result.
+
+**Unroutable with `--structured`:** Return `{"outcome": "unroutable", "message": "..."}`.
+
+### Record output (`--record`)
+
+Project the completed run into a `#Record` JSON object from the already-loaded `dialectics/governance/recording.cue`. Same output-only JSON rule applies.
+
+**Field population:**
+- `record_id`: `"rec-{protocol_lower}-{YYYYMMDD}-{4-char-hex}"` (e.g., `"rec-cffp-20260228-a7f3"`)
+- `source_run.run_id`: `"{protocol_lower}-{YYYYMMDD}-{4-char-hex}"` (same suffix, no `rec-` prefix)
+- `source_run.protocol`: Protocol acronym
+- `source_run.run_version`: From `#Protocol.version` in the loaded `.opt.cue` file
+- `source_run.subject`: User's problem text (after flag stripping)
+- `source_run.started` / `completed`: ISO 8601 using today's date, `T00:00:00Z` time portion
+- `dispute.prior_runs`: Default `[]`
+- `resolution.status`: `"decided"` if canonical/adopted/validated, `"open"` if indeterminate, `"rejected"` if all eliminated
+- `resolution.eliminated_count` and `survivors`: From derived phase data
+- `acknowledged_limitations`: From scope_narrowing rebuttals
+- `dependencies.consumed` / `produced`: Default `[]`
+- `tags`: Auto-generated — protocol category, protocol acronym lowercase, resolution status (e.g., `["adversarial", "cffp", "decided"]`)
+- `next_actions`: Populated ONLY when the protocol explicitly names a follow-up (CDP → CFFP, RCP blocked → CBP). No speculative suggestions.
+- `notes`: Default `""`
+
+**`dispute.kind` mapping** (structural feature → #DisputeKind):
+
+| Structural Feature | DisputeKind |
+|---|---|
+| `competing_candidates` | `candidate_selection` |
+| `term_inconsistency` | `term_ambiguity` |
+| `argument_fragility` | `assumption_audit` |
+| `unknown_design_space` | `design_mapping` |
+| `construct_incoherence` | `construct_repair` |
+| `implementation_gap` | `implementation_check` |
+| `revision_pressure` / `deprecation_pressure` | `governance_case` |
+| `cross_run_conflict` | `cross_run_conflict` |
+| `structural_transfer` | `analogy_transfer` |
+| `composition_emergence` | `composition_emergence` |
+| `observation_validity` | `observation_validity` |
+| `resource_constrained_choice` | `prioritization` |
+| `causal_ambiguity` | `candidate_selection` (note in dispute.description that this is causal hypothesis elimination) |
+
+**Ambiguous/unroutable routing with `--record`:** Same behavior as `--structured` — clarifying question in plain text; unroutable returns `{"outcome": "unroutable", "message": "..."}`.
