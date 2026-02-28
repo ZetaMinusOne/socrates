@@ -57,7 +57,10 @@ Plans:
   4. The exploratory protocol (ADP) executes its possibility-mapping phases
   5. When an adversarial protocol hits an obligation gate, execution pauses until all obligations are satisfied — no derivation proceeds with unmet gates
   6. When no candidates survive adversarial pressure, the revision loop triggers and returns feedback rather than forcing a false conclusion
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Adversarial protocol execution with obligation gates, revision loops, and narrative structure
+- [ ] 03-02-PLAN.md — Evaluative and exploratory protocol execution with multi-protocol handoff
 
 ### Phase 4: Structured Output
 **Goal**: Power users can pass `--structured` or `--record` to get typed output matching CUE schemas instead of narrative prose
@@ -77,5 +80,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete   | 2026-02-28 |
 | 2. Routing | 1/1 | Complete    | 2026-02-28 |
-| 3. Protocol Execution | 0/TBD | Not started | - |
+| 3. Protocol Execution | 0/2 | Not started | - |
 | 4. Structured Output | 0/TBD | Not started | - |
