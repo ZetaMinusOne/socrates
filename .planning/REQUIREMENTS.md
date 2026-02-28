@@ -27,13 +27,13 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **EXEC-02**: Skill can execute all 6 evaluative protocols (AAP, IFA, RCP, CGP, PTP, OVP) by reading their .cue schemas
 - [x] **EXEC-03**: Skill can execute the exploratory protocol (ADP) by reading its .cue schema
 - [x] **EXEC-04**: Obligation gates (#ObligationGate) are enforced during adversarial protocol execution — derivation blocked until all obligations satisfied
-- [x] **EXEC-05**: When no candidates survive adversarial pressure, the revision loop (#RevisionLoop) triggers feedback rather than forcing a false conclusion
+- [ ] **EXEC-05**: When no candidates survive adversarial pressure, the revision loop (#RevisionLoop) triggers feedback rather than forcing a false conclusion
 
 ### Output
 
 - [x] **OUTP-01**: User receives narrative prose by default explaining routing rationale, protocol execution steps, and conclusion
-- [x] **OUTP-02**: User can pass `--structured` flag to get typed results matching the protocol's CUE output schema instead of narrative
-- [x] **OUTP-03**: User can pass `--record` flag to get output formatted as a #Record compatible with governance/recording.cue (queryable audit trail)
+- [ ] **OUTP-02**: User can pass `--structured` flag to get typed results matching the protocol's CUE output schema instead of narrative
+- [ ] **OUTP-03**: User can pass `--record` flag to get output formatted as a #Record compatible with governance/recording.cue (queryable audit trail)
 
 ## v2 Requirements
 
@@ -79,13 +79,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXEC-02 | Phase 3 | Complete |
 | EXEC-03 | Phase 3 | Complete |
 | EXEC-04 | Phase 3 | Complete |
-| EXEC-05 | Phase 3 | Complete |
+| EXEC-05 | Phase 5 | Pending |
 | OUTP-01 | Phase 3 | Complete |
-| OUTP-02 | Phase 4 | Complete |
-| OUTP-03 | Phase 4 | Complete |
+| OUTP-02 | Phase 5 | Pending |
+| OUTP-03 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 16 total
+- Satisfied: 13
+- Pending (gap closure Phase 5): 3 (EXEC-05, OUTP-02, OUTP-03)
 - Mapped to phases: 16
 - Unmapped: 0
 

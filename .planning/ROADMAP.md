@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Routing** - Auto-routing via routing.cue validated with transparent protocol selection (completed 2026-02-28)
 - [x] **Phase 3: Protocol Execution** - All 13 protocols executable with narrative output, obligation gates, and revision loop (completed 2026-02-28)
 - [x] **Phase 4: Structured Output** - `--structured` and `--record` flags produce typed CUE-schema-compliant output (completed 2026-02-28)
+- [ ] **Phase 5: Schema Conformance Alignment** - Fix SKILL.md instructions to match actual CUE schema definitions for resolution enums, tier labels, type references, and ADP version field
 
 ## Phase Details
 
@@ -73,10 +74,24 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Add --structured and --record flag handling with structured JSON output rendering
 
+### Phase 5: Schema Conformance Alignment
+**Goal**: SKILL.md instructions exactly match CUE schema definitions so that `--structured` and `--record` output produces valid enum values, correct type references, and accurate tier labels for all 13 protocols
+**Depends on**: Phase 4
+**Requirements**: EXEC-05, OUTP-02, OUTP-03
+**Gap Closure:** Closes gaps from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. CDP terminal path uses `close_as_unified` resolution; ATP terminal path uses `close_as_rejected` — matching their respective CUE schemas
+  2. ADP + `--record` flow handles the missing `#Protocol.version` gracefully without producing an invalid `source_run.run_version` value
+  3. AAP FragilityMap tier labels in SKILL.md match `#FragilityTier.label` enum values from aap.opt.cue (structural, significant, moderate, minor)
+  4. SKILL.md references protocol-specific instance types (`#{ACRONYM}Instance`) instead of non-existent generic `#ProtocolInstance`
+**Plans**: 0 plans
+Plans:
+- [ ] 05-01-PLAN.md — Fix all schema-instruction mismatches in SKILL.md
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -84,3 +99,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 2. Routing | 1/1 | Complete    | 2026-02-28 |
 | 3. Protocol Execution | 2/2 | Complete   | 2026-02-28 |
 | 4. Structured Output | 1/1 | Complete   | 2026-02-28 |
+| 5. Schema Conformance | 0/1 | Not Started | — |
