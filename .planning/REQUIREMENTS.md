@@ -24,8 +24,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Protocol Execution
 
 - [x] **EXEC-01**: Skill can execute all 6 adversarial protocols (CFFP, CDP, CBP, HEP, ATP, EMP) by reading their .cue schemas
-- [ ] **EXEC-02**: Skill can execute all 6 evaluative protocols (AAP, IFA, RCP, CGP, PTP, OVP) by reading their .cue schemas
-- [ ] **EXEC-03**: Skill can execute the exploratory protocol (ADP) by reading its .cue schema
+- [x] **EXEC-02**: Skill can execute all 6 evaluative protocols (AAP, IFA, RCP, CGP, PTP, OVP) by reading their .cue schemas
+- [x] **EXEC-03**: Skill can execute the exploratory protocol (ADP) by reading its .cue schema
 - [x] **EXEC-04**: Obligation gates (#ObligationGate) are enforced during adversarial protocol execution — derivation blocked until all obligations satisfied
 - [x] **EXEC-05**: When no candidates survive adversarial pressure, the revision loop (#RevisionLoop) triggers feedback rather than forcing a false conclusion
 
@@ -76,8 +76,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ROUT-02 | Phase 2 | Complete |
 | ROUT-03 | Phase 2 | Complete |
 | EXEC-01 | Phase 3 | Complete |
-| EXEC-02 | Phase 3 | Pending |
-| EXEC-03 | Phase 3 | Pending |
+| EXEC-02 | Phase 3 | Complete |
+| EXEC-03 | Phase 3 | Complete |
 | EXEC-04 | Phase 3 | Complete |
 | EXEC-05 | Phase 3 | Complete |
 | OUTP-01 | Phase 3 | Complete |

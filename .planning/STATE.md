@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 3 of 4 (Protocol Execution)
-Plan: 1 of TBD in current phase
-Status: In progress — adversarial protocols complete
-Last activity: 2026-02-28 — Phase 3 Plan 01 complete
+Plan: 2 of TBD in current phase
+Status: In progress — adversarial + evaluative + ADP + multi-protocol handoff complete
+Last activity: 2026-02-28 — Phase 3 Plan 02 complete
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -29,10 +29,10 @@ Progress: [████░░░░░░] 40%
 |-------|-------|-------|----------|
 | 01-foundation | 2 | 5 min | 2.5 min |
 | 02-routing | 1 | 2 min | 2 min |
-| 03-protocol-execution | 1 | 1 min | 1 min |
+| 03-protocol-execution | 2 | 2 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 02-01 (2 min), 03-01 (1 min)
+- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 02-01 (2 min), 03-01 (1 min), 03-02 (1 min)
 - Trend: stable
 
 *Updated after each plan completion*
@@ -59,6 +59,9 @@ Recent decisions affecting current work:
 - Schema-directed execution in SKILL.md: Claude reads .opt.cue file and follows its type definitions — no hard-coded phase sequences in SKILL.md
 - 3 skip-retry diagnoses (construct_incoherent/CFFP, construct_not_decomposable/CDP, transfer_not_viable/ATP) bypass revision loop and close immediately
 - Phase 5 gate field names per-protocol: all_provable (CFFP), all_ready (CDP), all_satisfied (CBP/HEP/ATP/EMP)
+- Evaluative protocols have no revision loops: failed/indeterminate verdict is terminal — state this explicitly to prevent adversarial retry behavior
+- ADP persona voice resolved as third-person narrator (not first-person dialogue, not bare transcript): narrator describes each persona's argument
+- OVP → HEP handoff uses OVP's validated_observation as HEP starting point (not re-derived from original problem)
 
 ### Pending Todos
 
@@ -71,5 +74,5 @@ None — adversarial protocol fidelity concern resolved by schema-directed execu
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 03-01-PLAN.md — adversarial protocol execution instructions added to SKILL.md
-Resume file: .planning/phases/03-protocol-execution/03-02-PLAN.md (evaluative + exploratory execution)
+Stopped at: Completed 03-02-PLAN.md — evaluative, ADP exploratory, and multi-protocol handoff execution instructions added to SKILL.md
+Resume file: Next plan in phase 03, or phase 04 if phase 03 is complete
