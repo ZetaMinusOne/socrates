@@ -29,7 +29,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The dialectics git submodule is initialized and all .cue files are readable by Claude via the Read tool (preflight check passes)
   4. SKILL.md instructs Claude to load protocol files on demand — no protocol content is inlined in SKILL.md itself
   5. Protocol .cue files are stripped of non-essential comments and whitespace to fit within the 16,000-character context budget
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 01-01-PLAN.md — Register skill, wire submodule, create SKILL.md with progressive disclosure
+- [ ] 01-02-PLAN.md — Strip CUE files and generate optimized protocol files for context budget
 
 ### Phase 2: Routing
 **Goal**: Users describe any problem and the skill transparently selects the correct dialectic protocol before any protocol execution begins
@@ -70,7 +73,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/2 | Planning complete | - |
 | 2. Routing | 0/TBD | Not started | - |
 | 3. Protocol Execution | 0/TBD | Not started | - |
 | 4. Structured Output | 0/TBD | Not started | - |
