@@ -84,7 +84,7 @@ Plans:
   2. ADP + `--record` flow handles the missing `#Protocol.version` gracefully without producing an invalid `source_run.run_version` value
   3. AAP FragilityMap tier labels in SKILL.md match `#FragilityTier.label` enum values from aap.opt.cue (structural, significant, moderate, minor)
   4. SKILL.md references protocol-specific instance types (`#{ACRONYM}Instance`) instead of non-existent generic `#ProtocolInstance`
-**Plans**: 0 plans
+**Plans**: 1 plan
 Plans:
 - [ ] 05-01-PLAN.md — Fix all schema-instruction mismatches in SKILL.md
 
