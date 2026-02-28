@@ -217,3 +217,33 @@ Render each phase as a section header followed by narrative prose, using the sam
 - **AAP note:** AAP has 6 phases — subject, extraction, plausibility, stress-test, fragility map, and recommendations. Give the stress-test and fragility map phases their own section headers; the fragility map (#FragilityMap) lists assumptions by tier (load-bearing, structural, background). The recommendations phase references the tier rankings.
 
 - **PTP note:** PTP produces a ranked list with sensitivity analysis. If the top-ranked choice changes when criteria weights are perturbed, note the sensitivity in the conclusion — the ranking is weight-dependent, and the user should know which weights drive the outcome.
+
+### Exploratory protocol (ADP)
+
+Read the protocol file at `protocols/exploratory/adp.opt.cue`. ADP's model is distinct from both adversarial and evaluative families: rather than eliminating candidates or auditing a subject, it constructs a design space through structured multi-persona debate.
+
+**Execution steps:**
+
+1. **Subject and constraints:** Establish the subject type from the user's problem (new_construct, new_domain, breaking_change, or decision — per ADP's #ADPSubject). Declare which design constraints apply to this run (from ADP's #DesignConstraint types).
+
+2. **Rounds:** Execute each round in sequence. Round types: probe, pressure, synthesis, handoff. Each round involves 5–6 personas (formalist, implementor, adversary, operator, consumer, referee). For each persona's contribution, narrate in **third person**: "The formalist raises a decidability concern, arguing that..." — do NOT write as first-person dialogue ("As the formalist, I believe...") and do NOT write as bare transcript ("Formalist: ..."). The narrator describes each persona's argument and its relationship to other arguments.
+
+3. **Referee constraint checks:** After each round, the referee applies constraint checks to all proposals. If a proposal fails a constraint check (`#ConstraintCheckSet.passed: false`), it is blocked from proceeding. State which constraint it violated.
+
+4. **Round progression:** Typical sequence is probe → pressure → synthesis. If synthesis does not converge, additional pressure/synthesis rounds may occur, or the referee declares scope_reduction.
+
+5. **Terminal outcomes:** The referee declares one of three outcomes: `design_mapped` (produces #DesignMap), `exhaustion` (rounds exhausted without convergence), or `scope_reduction` (problem narrowed to a feasible subset). If `design_mapped`, render the DesignMap contents as the conclusion. Note any constructs marked as CFFP-ready — these are candidates for formalization the user can pursue via `/socrates`.
+
+### Multi-protocol handoff
+
+When a composite sequence executes, show an explicit handoff section between protocols before beginning the next protocol. Format:
+
+> "[First protocol] established that [key output]. This feeds into [second protocol] as follows: [explicit input mapping]."
+
+**OVP → HEP (confirmed prerequisite composite):** Extract OVP's Phase 4 `validated_observation` — its phenomenon, confidence level, and caveats. Use this as HEP's `#Phenomenon.observation` input. Incorporate OVP's caveats as `known_exclusions` in HEP's initial hypothesis set. Do NOT re-derive the phenomenon from the user's original problem description — use OVP's refined output as HEP's starting point.
+
+**Early termination:** If the first protocol's outcome invalidates the need for the second, explain why the sequence ends, show the first protocol's complete output, and suggest alternatives. Example: if OVP returns `artifact` (the observation is not a real phenomenon), HEP would operate on a false premise — stop, explain the invalidation, and suggest what the user might investigate instead.
+
+**No redundant routing block:** When the second protocol begins, do not re-display a routing block. The composite routing overview shown before the first protocol is sufficient.
+
+**Other composite sequences:** Follow the same handoff pattern. Check the first protocol's terminal output type and map relevant fields to the second protocol's Phase 1 input type. The handoff section makes the state transfer explicit so the user can see what is being carried forward.
