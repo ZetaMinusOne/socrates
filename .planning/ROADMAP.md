@@ -94,6 +94,7 @@ Plans:
 - [x] **Phase 7: Pre-Built Protocol Files** - All 15 `.opt.cue` files committed to git and verified present after a clean plugin install (completed 2026-03-01)
 - [ ] **Phase 8: Session Hook** - Cross-platform SessionStart hook injects skill context automatically on session open, resume, and clear
 - [ ] **Phase 9: Marketplace Wiring and End-to-End Validation** - `marketplace.json` published, full install flow verified via `/plugin marketplace add` and `/plugin install`
+- [ ] **Phase 10: Repository Cleanup and Phase 6 Verification** - Fix submodule gitlink, remove old paths from HEAD, create Phase 6 VERIFICATION.md (gap closure)
 
 ## Phase Details
 
@@ -145,10 +146,23 @@ Plans:
   4. After the same install, user runs `/socrates --record <problem>` and the `$CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue` file is readable and `--record` output is valid
 **Plans**: TBD
 
+### Phase 10: Repository Cleanup and Phase 6 Verification
+**Goal**: Repository state is clean for downstream phases — submodule gitlink registered at correct path, old paths removed from HEAD, and Phase 6 requirements formally verified so they count as satisfied
+**Depends on**: Phase 7
+**Requirements**: PLUG-03, PLUG-04, PATH-01, PATH-02, PATH-03
+**Gap Closure:** Closes INTEG-01, INTEG-02, and verification gaps from v1.1 audit
+**Success Criteria** (what must be TRUE):
+  1. `git ls-files --stage socrates/dialectics` returns a gitlink entry (mode 160000) — fresh `git clone && git submodule update --init` succeeds
+  2. `git status` shows no unstaged deletes under `.claude/skills/socrates/` — all 18 old paths removed from HEAD via `git rm`
+  3. VERIFICATION.md exists for Phase 6 confirming PLUG-03, PLUG-04, PATH-01, PATH-02, PATH-03 are satisfied (cross-referenced with SUMMARY frontmatter and UAT results)
+  4. ROADMAP.md progress table accurately reflects Phase 6 plan execution status
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 10 → 8 → 9
+(Phase 10 is a gap closure phase that must execute before Phase 8 — fixes repository state Phase 8/9 depend on)
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -157,7 +171,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 3. Protocol Execution | v1.0 | 2/2 | Complete | 2026-02-28 |
 | 4. Structured Output | v1.0 | 1/1 | Complete | 2026-02-28 |
 | 5. Schema Conformance | v1.0 | 1/1 | Complete | 2026-02-28 |
-| 6. Plugin Scaffold and Path Migration | v1.1 | 0/? | Not started | - |
-| 7. Pre-Built Protocol Files | 1/1 | Complete   | 2026-03-01 | - |
+| 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Unverified | - |
+| 7. Pre-Built Protocol Files | v1.1 | 1/1 | Complete | 2026-03-01 |
 | 8. Session Hook | v1.1 | 0/? | Not started | - |
 | 9. Marketplace Wiring and E2E Validation | v1.1 | 0/? | Not started | - |
+| 10. Repository Cleanup and Phase 6 Verification | v1.1 | 0/? | Not started | - |

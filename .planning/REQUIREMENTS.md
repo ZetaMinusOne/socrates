@@ -43,14 +43,14 @@ Requirements for plugin distribution milestone. Each maps to roadmap phases.
 
 - [ ] **PLUG-01**: User can run `/plugin marketplace add riverline-labs/socrates` to register the marketplace
 - [ ] **PLUG-02**: User can run `/plugin install socrates-skill@socrates` to install the plugin from the marketplace
-- [x] **PLUG-03**: Plugin manifest (plugin.json) includes name, version, description, author, homepage, repository, and license
-- [x] **PLUG-04**: Plugin version in plugin.json follows semver and enables update detection for cached installations
+- [ ] **PLUG-03**: Plugin manifest (plugin.json) includes name, version, description, author, homepage, repository, and license
+- [ ] **PLUG-04**: Plugin version in plugin.json follows semver and enables update detection for cached installations
 
 ### Path Migration
 
-- [x] **PATH-01**: User can invoke `/socrates` after plugin install and all protocol file reads resolve correctly via `$CLAUDE_PLUGIN_ROOT`
-- [x] **PATH-02**: SKILL.md preflight check reads `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue` (not hardcoded `.claude/skills/` path)
-- [x] **PATH-03**: All ~18 protocol file references in SKILL.md use `$CLAUDE_PLUGIN_ROOT/socrates/protocols/` prefix
+- [ ] **PATH-01**: User can invoke `/socrates` after plugin install and all protocol file reads resolve correctly via `$CLAUDE_PLUGIN_ROOT`
+- [ ] **PATH-02**: SKILL.md preflight check reads `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue` (not hardcoded `.claude/skills/` path)
+- [ ] **PATH-03**: All ~18 protocol file references in SKILL.md use `$CLAUDE_PLUGIN_ROOT/socrates/protocols/` prefix
 
 ### Build & Distribution
 
@@ -122,11 +122,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUTP-03 | Phase 5 | Complete |
 | PLUG-01 | Phase 9 | Pending |
 | PLUG-02 | Phase 9 | Pending |
-| PLUG-03 | Phase 6 | Complete |
-| PLUG-04 | Phase 6 | Complete |
-| PATH-01 | Phase 6 | Complete |
-| PATH-02 | Phase 6 | Complete |
-| PATH-03 | Phase 6 | Complete |
+| PLUG-03 | Phase 10 | Pending |
+| PLUG-04 | Phase 10 | Pending |
+| PATH-01 | Phase 10 | Pending |
+| PATH-02 | Phase 10 | Pending |
+| PATH-03 | Phase 10 | Pending |
 | BLDG-01 | Phase 7 | Complete |
 | BLDG-02 | Phase 7 | Complete |
 | BLDG-03 | Phase 7 | Complete |
@@ -142,4 +142,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-03-01 after milestone v1.1 roadmap creation*
+*Last updated: 2026-03-01 after gap closure phase creation (Phase 10)*
