@@ -107,7 +107,10 @@ Plans:
   3. User installs via `--plugin-dir ./socrates` and invokes `/socrates <problem>` — the preflight check reads `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue` without a file-not-found error
   4. All ~18 protocol file Read references in SKILL.md use the `$CLAUDE_PLUGIN_ROOT/socrates/protocols/` prefix — zero occurrences of the old `.claude/skills/socrates/` path remain
   5. SKILL.md lives at `socrates/skills/socrates/SKILL.md` and the slash command registers correctly under the plugin namespace
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 06-01-PLAN.md — Create plugin manifest, restructure directory, test --plugin-dir path resolution
+- [ ] 06-02-PLAN.md — Migrate all 24 path references in SKILL.md and verify end-to-end
 
 ### Phase 7: Pre-Built Protocol Files
 **Goal**: A consumer who installs the plugin gets all 15 protocol files in their plugin cache without running any build step or submodule init — every file Claude needs is committed to git and present after install
