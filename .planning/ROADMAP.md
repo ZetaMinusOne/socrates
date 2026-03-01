@@ -90,11 +90,11 @@ Plans:
 
 **Milestone Goal:** Make Socrates installable via `/plugin` from a marketplace — single-repo, pre-built protocol files, zero consumer setup.
 
-- [ ] **Phase 6: Plugin Scaffold and Path Migration** - Plugin manifest created, directory restructured, all SKILL.md path references migrated to `$CLAUDE_PLUGIN_ROOT`
+- [x] **Phase 6: Plugin Scaffold and Path Migration** - Plugin manifest created, directory restructured, all SKILL.md path references migrated to `$CLAUDE_PLUGIN_ROOT` (completed 2026-03-01)
 - [x] **Phase 7: Pre-Built Protocol Files** - All 15 `.opt.cue` files committed to git and verified present after a clean plugin install (completed 2026-03-01)
 - [ ] **Phase 8: Session Hook** - Cross-platform SessionStart hook injects skill context automatically on session open, resume, and clear
 - [ ] **Phase 9: Marketplace Wiring and End-to-End Validation** - `marketplace.json` published, full install flow verified via `/plugin marketplace add` and `/plugin install`
-- [ ] **Phase 10: Repository Cleanup and Phase 6 Verification** - Fix submodule gitlink, remove old paths from HEAD, create Phase 6 VERIFICATION.md (gap closure)
+- [x] **Phase 10: Repository Cleanup and Phase 6 Verification** - Fix submodule gitlink, remove old paths from HEAD, create Phase 6 VERIFICATION.md (gap closure) (completed 2026-03-01)
 
 ## Phase Details
 
@@ -110,8 +110,8 @@ Plans:
   5. SKILL.md lives at `socrates/skills/socrates/SKILL.md` and the slash command registers correctly under the plugin namespace
 **Plans**: 2 plans
 Plans:
-- [ ] 06-01-PLAN.md — Create plugin manifest, restructure directory, test --plugin-dir path resolution
-- [ ] 06-02-PLAN.md — Migrate all 24 path references in SKILL.md and verify end-to-end
+- [x] 06-01-PLAN.md — Create plugin manifest, restructure directory, test --plugin-dir path resolution
+- [x] 06-02-PLAN.md — Migrate all 24 path references in SKILL.md and verify end-to-end
 
 ### Phase 7: Pre-Built Protocol Files
 **Goal**: A consumer who installs the plugin gets all 15 protocol files in their plugin cache without running any build step or submodule init — every file Claude needs is committed to git and present after install
@@ -158,7 +158,7 @@ Plans:
   4. ROADMAP.md progress table accurately reflects Phase 6 plan execution status
 **Plans**: 1 plan
 Plans:
-- [ ] 10-01-PLAN.md — Fix git index, create Phase 6 VERIFICATION.md, update ROADMAP progress
+- [x] 10-01-PLAN.md — Fix git index, create Phase 6 VERIFICATION.md, update ROADMAP progress
 
 ## Progress
 
@@ -173,8 +173,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 10 �
 | 3. Protocol Execution | v1.0 | 2/2 | Complete | 2026-02-28 |
 | 4. Structured Output | v1.0 | 1/1 | Complete | 2026-02-28 |
 | 5. Schema Conformance | v1.0 | 1/1 | Complete | 2026-02-28 |
-| 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Unverified | - |
+| 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Complete | 2026-03-01 |
 | 7. Pre-Built Protocol Files | v1.1 | 1/1 | Complete | 2026-03-01 |
 | 8. Session Hook | v1.1 | 0/? | Not started | - |
 | 9. Marketplace Wiring and E2E Validation | v1.1 | 0/? | Not started | - |
-| 10. Repository Cleanup and Phase 6 Verification | v1.1 | 0/? | Not started | - |
+| 10. Repository Cleanup and Phase 6 Verification | v1.1 | 1/1 | Complete | 2026-03-01 |
