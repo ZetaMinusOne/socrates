@@ -92,7 +92,7 @@ Plans:
 
 - [x] **Phase 6: Plugin Scaffold and Path Migration** - Plugin manifest created, directory restructured, all SKILL.md path references migrated to `$CLAUDE_PLUGIN_ROOT` (completed 2026-03-01)
 - [x] **Phase 7: Pre-Built Protocol Files** - All 15 `.opt.cue` files committed to git and verified present after a clean plugin install (completed 2026-03-01)
-- [ ] **Phase 8: Session Hook** - Cross-platform SessionStart hook injects skill context automatically on session open, resume, and clear
+- [x] **Phase 8: Session Hook** - SessionStart hook injects SKILL.md frontmatter as additionalContext on startup/resume/clear; extensionless script with BASH_SOURCE[0] path derivation (completed 2026-03-01)
 - [ ] **Phase 9: Marketplace Wiring and End-to-End Validation** - `marketplace.json` published, full install flow verified via `/plugin marketplace add` and `/plugin install`
 - [x] **Phase 10: Repository Cleanup and Phase 6 Verification** - Fix submodule gitlink, remove old paths from HEAD, create Phase 6 VERIFICATION.md (gap closure) (completed 2026-03-01)
 
@@ -123,7 +123,7 @@ Plans:
   3. Developer runs `make build` (or equivalent) and the 15 `.opt.cue` files are regenerated from the `dialectics/` submodule via `scripts/strip_cue.py`
 **Plans**: 1 plan
 Plans:
-- [ ] 07-01-PLAN.md — Regenerate and commit 15 pre-built protocol files, add make check staleness target, track build infrastructure
+- [x] 07-01-PLAN.md — Regenerate and commit 15 pre-built protocol files, add make check staleness target, track build infrastructure
 
 ### Phase 8: Session Hook
 **Goal**: Users who open a new Claude Code session, resume a session, or run `/clear` have the Socrates skill context automatically available — no manual invocation required to prime the session
@@ -135,7 +135,7 @@ Plans:
   3. All shell scripts in `socrates/hooks/` have LF line endings enforced by `.gitattributes` — no CRLF contamination on Windows checkout
 **Plans**: 1 plan
 Plans:
-- [ ] 08-01-PLAN.md — Create SessionStart hook files (hooks.json, session-start script, .gitattributes) and verify correctness
+- [x] 08-01-PLAN.md — Create SessionStart hook files (hooks.json, session-start script, .gitattributes) and verify correctness
 
 ### Phase 9: Marketplace Wiring and End-to-End Validation
 **Goal**: Any user can install Socrates with two commands — add the marketplace and install the plugin — and get a fully working skill with zero additional setup
@@ -177,6 +177,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 10 �
 | 5. Schema Conformance | v1.0 | 1/1 | Complete | 2026-02-28 |
 | 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Complete | 2026-03-01 |
 | 7. Pre-Built Protocol Files | v1.1 | 1/1 | Complete | 2026-03-01 |
-| 8. Session Hook | v1.1 | 0/? | Not started | - |
+| 8. Session Hook | v1.1 | 1/1 | Complete | 2026-03-01 |
 | 9. Marketplace Wiring and E2E Validation | v1.1 | 0/? | Not started | - |
 | 10. Repository Cleanup and Phase 6 Verification | v1.1 | Complete    | 2026-03-01 | 2026-03-01 |

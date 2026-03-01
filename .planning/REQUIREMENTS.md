@@ -60,9 +60,9 @@ Requirements for plugin distribution milestone. Each maps to roadmap phases.
 
 ### Session Hook
 
-- [ ] **HOOK-01**: User opens a new Claude Code session and the skill context is automatically injected via SessionStart hook
-- [ ] **HOOK-02**: Session-start hook works on macOS, Linux, and Windows via cross-platform polyglot wrapper (run-hook.cmd)
-- [ ] **HOOK-03**: Hook scripts use LF line endings enforced by `.gitattributes` to prevent Windows checkout breakage
+- [x] **HOOK-01**: User opens a new Claude Code session and the skill context is automatically injected via SessionStart hook
+- [x] **HOOK-02**: Session-start hook works on macOS, Linux, and Windows via cross-platform extensionless script (no run-hook.cmd wrapper needed per superpowers pattern evolution)
+- [x] **HOOK-03**: Hook scripts use LF line endings enforced by `.gitattributes` to prevent Windows checkout breakage
 
 ## v2 Requirements
 
@@ -130,9 +130,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BLDG-01 | Phase 7 | Complete |
 | BLDG-02 | Phase 7 | Complete |
 | BLDG-03 | Phase 7 | Complete |
-| HOOK-01 | Phase 8 | Pending |
-| HOOK-02 | Phase 8 | Pending |
-| HOOK-03 | Phase 8 | Pending |
+| HOOK-01 | Phase 8 | Complete |
+| HOOK-02 | Phase 8 | Complete |
+| HOOK-03 | Phase 8 | Complete |
 
 **Coverage:**
 - v1.0 requirements: 16 total (all complete)
@@ -142,4 +142,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-03-01 after gap closure phase creation (Phase 10)*
+*Last updated: 2026-03-01 after Phase 8 completion (HOOK-01, HOOK-02, HOOK-03 marked complete)*
