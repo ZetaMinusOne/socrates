@@ -3,9 +3,9 @@
 **Defined:** 2026-02-28
 **Core Value:** Users get rigorous, protocol-driven reasoning on any problem without needing to know which dialectic method to apply
 
-## v1 Requirements
+## v1.0 Requirements (Complete)
 
-Requirements for initial release. Each maps to roadmap phases.
+All v1.0 requirements shipped and verified.
 
 ### Skill Infrastructure
 
@@ -35,6 +35,35 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **OUTP-02**: User can pass `--structured` flag to get typed results matching the protocol's CUE output schema instead of narrative
 - [x] **OUTP-03**: User can pass `--record` flag to get output formatted as a #Record compatible with governance/recording.cue (queryable audit trail)
 
+## v1.1 Requirements
+
+Requirements for plugin distribution milestone. Each maps to roadmap phases.
+
+### Plugin Scaffold
+
+- [ ] **PLUG-01**: User can run `/plugin marketplace add riverline-labs/socrates` to register the marketplace
+- [ ] **PLUG-02**: User can run `/plugin install socrates-skill@socrates` to install the plugin from the marketplace
+- [ ] **PLUG-03**: Plugin manifest (plugin.json) includes name, version, description, author, homepage, repository, and license
+- [ ] **PLUG-04**: Plugin version in plugin.json follows semver and enables update detection for cached installations
+
+### Path Migration
+
+- [ ] **PATH-01**: User can invoke `/socrates` after plugin install and all protocol file reads resolve correctly via `$CLAUDE_PLUGIN_ROOT`
+- [ ] **PATH-02**: SKILL.md preflight check reads `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue` (not hardcoded `.claude/skills/` path)
+- [ ] **PATH-03**: All ~18 protocol file references in SKILL.md use `$CLAUDE_PLUGIN_ROOT/socrates/protocols/` prefix
+
+### Build & Distribution
+
+- [ ] **BLDG-01**: User can install the plugin without running `git submodule update --init` or any build step
+- [ ] **BLDG-02**: All 15 pre-built `.opt.cue` files (13 protocols + dialectics + routing) are committed to git and present in the repo
+- [ ] **BLDG-03**: Developer can run a build command (Makefile) to regenerate `.opt.cue` files from the dialectics submodule
+
+### Session Hook
+
+- [ ] **HOOK-01**: User opens a new Claude Code session and the skill context is automatically injected via SessionStart hook
+- [ ] **HOOK-02**: Session-start hook works on macOS, Linux, and Windows via cross-platform polyglot wrapper (run-hook.cmd)
+- [ ] **HOOK-03**: Hook scripts use LF line endings enforced by `.gitattributes` to prevent Windows checkout breakage
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -49,17 +78,25 @@ Deferred to future release. Tracked but not in current roadmap.
 - **EXTN-01**: User can author custom protocols following the CUE schema conventions
 - **EXTN-02**: Obligation gate reporting — explicit pass/fail report for each gate in output
 
+### Plugin Enhancements
+
+- **PLGE-01**: `.claude/settings.json` with `extraKnownMarketplaces` for zero-friction project onboarding
+- **PLGE-02**: Multiple plugins listed in marketplace (when riverline-labs builds more tools)
+
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
 | CUE runtime execution (`cue eval`) | Claude interprets schemas directly; no toolchain dependency |
-| Claude Desktop support | Claude Code only for v1; different installation mechanism |
+| Claude Desktop support | Claude Code only for v1.1; different installation mechanism |
 | Custom protocol authoring | Massive scope expansion; users consume existing 13 protocols |
 | Persistent run history/database | Beyond skill scope; users save recording output themselves |
 | Web UI or chat interface | Contradicts Claude Code distribution decision |
 | Streaming structured output | CUE-typed output must be complete to be valid |
 | Protocol selection override | Bypasses routing which is core value; users phrase problems to trigger routing |
+| Separate marketplace repo | Single-repo approach chosen; simpler, no sync burden |
+| CI/release pipeline for builds | Pre-built files committed directly; no automation needed |
+| npm distribution | Git-based install sufficient; npm adds registry publish burden |
 
 ## Traceability
 
@@ -83,14 +120,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUTP-01 | Phase 3 | Complete |
 | OUTP-02 | Phase 5 | Complete |
 | OUTP-03 | Phase 5 | Complete |
+| PLUG-01 | — | Pending |
+| PLUG-02 | — | Pending |
+| PLUG-03 | — | Pending |
+| PLUG-04 | — | Pending |
+| PATH-01 | — | Pending |
+| PATH-02 | — | Pending |
+| PATH-03 | — | Pending |
+| BLDG-01 | — | Pending |
+| BLDG-02 | — | Pending |
+| BLDG-03 | — | Pending |
+| HOOK-01 | — | Pending |
+| HOOK-02 | — | Pending |
+| HOOK-03 | — | Pending |
 
 **Coverage:**
-- v1 requirements: 16 total
-- Satisfied: 16
-- Pending: 0
-- Mapped to phases: 16
-- Unmapped: 0
+- v1.0 requirements: 16 total (all complete)
+- v1.1 requirements: 13 total
+- Mapped to phases: 16 (v1.0) + 0 (v1.1, pending roadmap)
+- Unmapped: 13 (v1.1)
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-02-28 after Phase 2 routing completion*
+*Last updated: 2026-03-01 after milestone v1.1 requirements definition*
