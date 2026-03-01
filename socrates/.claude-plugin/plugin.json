@@ -1,0 +1,11 @@
+{
+  "name": "socrates-skill",
+  "version": "0.1.0",
+  "description": "Structured dialectic reasoning via 13 protocols. Invoke explicitly with /socrates — never auto-applies to problems.",
+  "author": {
+    "name": "zetaminusone"
+  },
+  "homepage": "https://zetaminusone.com",
+  "repository": "https://github.com/riverline-labs/socrates",
+  "license": "MIT"
+}
