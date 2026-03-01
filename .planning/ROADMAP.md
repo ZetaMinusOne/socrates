@@ -120,7 +120,9 @@ Plans:
   1. User installs the plugin (clean cache, no prior setup) and runs `/socrates <problem>` — all protocol files load without any "file not found" or "submodule not initialized" errors
   2. `git ls-files socrates/protocols/ | wc -l` returns 15 (13 protocol files + dialectics.opt.cue + routing.opt.cue)
   3. Developer runs `make build` (or equivalent) and the 15 `.opt.cue` files are regenerated from the `dialectics/` submodule via `scripts/strip_cue.py`
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 07-01-PLAN.md — Regenerate and commit 15 pre-built protocol files, add make check staleness target, track build infrastructure
 
 ### Phase 8: Session Hook
 **Goal**: Users who open a new Claude Code session, resume a session, or run `/clear` have the Socrates skill context automatically available — no manual invocation required to prime the session
