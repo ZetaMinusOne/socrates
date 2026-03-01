@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# hooks/session-start — extensionless intentionally (Claude Code 2.1.x .sh auto-prepend avoidance)
+# Injects SKILL.md YAML frontmatter as additionalContext for SessionStart hook
+
+# Derive plugin root from script location (CLAUDE_PLUGIN_ROOT is unset in hook env, bug #24529)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+SKILL_PATH="${PLUGIN_ROOT}/skills/socrates/SKILL.md"
+
+# Silent failure: file missing
+if [ ! -f "$SKILL_PATH" ]; then
+  exit 0
+fi
+
+# Extract YAML frontmatter (content between first --- pair)
+# awk counter: increment on ---, skip those lines, print lines when counter==1
+frontmatter=$(awk '/^---$/{c++;next} c==1{print}' "$SKILL_PATH")
+
+# Silent failure: no frontmatter found
+if [ -z "$frontmatter" ]; then
+  exit 0
+fi
+
+# JSON-escape the frontmatter (bash parameter substitution — no external tools)
+escaped="${frontmatter//\\/\\\\}"    # backslashes first
+escaped="${escaped//\"/\\\"}"         # double quotes
+escaped="${escaped//$'\n'/\\n}"       # newlines
+escaped="${escaped//$'\r'/}"          # strip carriage returns
+escaped="${escaped//$'\t'/\\t}"       # tabs
+
+# Output hookSpecificOutput JSON
+# Source: https://code.claude.com/docs/en/hooks — SessionStart decision control
+printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}' "$escaped"
+exit 0

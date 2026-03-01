@@ -1,0 +1,6 @@
+# Normalize line endings
+* text=auto
+
+# Force LF for shell scripts and hook files
+*.sh text eol=lf
+socrates/hooks/* text eol=lf
