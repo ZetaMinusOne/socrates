@@ -156,7 +156,9 @@ Plans:
   2. `git status` shows no unstaged deletes under `.claude/skills/socrates/` — all 18 old paths removed from HEAD via `git rm`
   3. VERIFICATION.md exists for Phase 6 confirming PLUG-03, PLUG-04, PATH-01, PATH-02, PATH-03 are satisfied (cross-referenced with SUMMARY frontmatter and UAT results)
   4. ROADMAP.md progress table accurately reflects Phase 6 plan execution status
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 10-01-PLAN.md — Fix git index, create Phase 6 VERIFICATION.md, update ROADMAP progress
 
 ## Progress
 
