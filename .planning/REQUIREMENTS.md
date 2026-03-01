@@ -43,8 +43,8 @@ Requirements for plugin distribution milestone. Each maps to roadmap phases.
 
 - [ ] **PLUG-01**: User can run `/plugin marketplace add riverline-labs/socrates` to register the marketplace
 - [ ] **PLUG-02**: User can run `/plugin install socrates-skill@socrates` to install the plugin from the marketplace
-- [ ] **PLUG-03**: Plugin manifest (plugin.json) includes name, version, description, author, homepage, repository, and license
-- [ ] **PLUG-04**: Plugin version in plugin.json follows semver and enables update detection for cached installations
+- [x] **PLUG-03**: Plugin manifest (plugin.json) includes name, version, description, author, homepage, repository, and license
+- [x] **PLUG-04**: Plugin version in plugin.json follows semver and enables update detection for cached installations
 
 ### Path Migration
 
@@ -122,8 +122,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUTP-03 | Phase 5 | Complete |
 | PLUG-01 | Phase 9 | Pending |
 | PLUG-02 | Phase 9 | Pending |
-| PLUG-03 | Phase 6 | Pending |
-| PLUG-04 | Phase 6 | Pending |
+| PLUG-03 | Phase 6 | Complete |
+| PLUG-04 | Phase 6 | Complete |
 | PATH-01 | Phase 6 | Pending |
 | PATH-02 | Phase 6 | Pending |
 | PATH-03 | Phase 6 | Pending |
