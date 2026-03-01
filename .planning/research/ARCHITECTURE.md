@@ -1,316 +1,529 @@
 # Architecture Research
 
-**Domain:** Claude Code skill — LLM-driven reasoning protocol executor
-**Researched:** 2026-02-28
-**Confidence:** HIGH (official Claude Code docs verified; dialectics repo inspected directly)
+**Domain:** Claude Code plugin distribution — skill packaging with pre-built assets
+**Researched:** 2026-03-01
+**Confidence:** HIGH (official Claude Code plugin, hooks, skills, and marketplace docs verified from source)
+
+---
 
 ## Standard Architecture
 
-### System Overview
+### System Overview — Plugin Layer (v1.1 addition)
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│                   GitHub Repo (marketplace + plugin)                │
+│                                                                      │
+│  .claude-plugin/marketplace.json   ← catalog listing socrates        │
+│  README.md                         ← install instructions            │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  socrates/   (plugin root)                                    │   │
+│  │                                                               │   │
+│  │  .claude-plugin/plugin.json      ← name, version, author     │   │
+│  │                                                               │   │
+│  │  skills/socrates/SKILL.md        ← entry point (MOVED)       │   │
+│  │                                                               │   │
+│  │  hooks/hooks.json                ← SessionStart hook config   │   │
+│  │  hooks/inject-context.sh         ← context injection script   │   │
+│  │                                                               │   │
+│  │  protocols/                      ← pre-built distribution     │   │
+│  │    dialectics.opt.cue                                         │   │
+│  │    routing.opt.cue                                            │   │
+│  │    adversarial/{atp,cbp,cdp,cffp,emp,hep}.opt.cue            │   │
+│  │    evaluative/{aap,cgp,ifa,ovp,ptp,rcp}.opt.cue              │   │
+│  │    exploratory/adp.opt.cue                                    │   │
+│  │                                                               │   │
+│  │  dialectics/   (git submodule — dev-only, not needed at       │   │
+│  │    dialectics.cue               runtime by consumers)         │   │
+│  │    governance/routing.cue                                     │   │
+│  │    governance/recording.cue                                   │   │
+│  │    protocols/**/*.cue                                         │   │
+│  │                                                               │   │
+│  │  scripts/strip_cue.py            ← build step (maintainer)   │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────────────────────┘
+
+Consumer install cache (after /plugin install):
+~/.claude/plugins/cache/socrates/
+  skills/socrates/SKILL.md           ← paths use $CLAUDE_PLUGIN_ROOT
+  protocols/**/*.opt.cue             ← all pre-built files present
+  hooks/hooks.json
+  hooks/inject-context.sh
+  dialectics/governance/recording.cue  ← needed for --record flag
+  (dialectics/ rest of submodule also copied, unused)
+```
+
+### System Overview — Reasoning Layer (v1.0, unchanged)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      User Interaction Layer                          │
-│  User types /socrates [problem description]                          │
+│  User types /socrates [problem description] [--structured] [--record]│
 ├─────────────────────────────────────────────────────────────────────┤
 │                      Skill Entry Point                               │
-│  .claude/skills/socrates/SKILL.md                                   │
-│  (frontmatter: name, description, disable-model-invocation: true)   │
+│  $CLAUDE_PLUGIN_ROOT/skills/socrates/SKILL.md                       │
+│  (frontmatter: name, disable-model-invocation: true, allowed-tools) │
 ├───────────────────┬─────────────────────────────────────────────────┤
 │  Routing Layer    │         Protocol Execution Layer                 │
 │                   │                                                  │
-│  governance/      │  protocols/adversarial/   protocols/evaluative/ │
-│  routing.cue      │  cffp.cue  cdp.cue        aap.cue  ifa.cue     │
-│                   │  cbp.cue   hep.cue        rcp.cue  cgp.cue     │
-│  (Claude reads    │  atp.cue   emp.cue        ptp.cue  ovp.cue     │
-│   this to select  │                                                  │
-│   protocol)       │  protocols/exploratory/                          │
-│                   │  adp.cue                                         │
+│  routing.opt.cue  │  protocols/adversarial/   protocols/evaluative/ │
+│  (stripped)       │  cffp  cdp  cbp           aap  ifa  rcp         │
+│                   │  hep   atp  emp            cgp  ptp  ovp         │
+│  Claude reads to  │                                                  │
+│  select protocol  │  protocols/exploratory/adp.opt.cue              │
 │                   │                                                  │
-│                   │  (Claude reads the selected .cue file and        │
-│                   │   executes it as a reasoning protocol)           │
 ├───────────────────┴─────────────────────────────────────────────────┤
-│                      Recording Layer                                 │
-│  governance/recording.cue                                            │
-│  (Claude applies this schema to produce a structured run record)    │
+│                      Recording Layer (--record only)                 │
+│  $CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue            │
+│  (raw .cue — not stripped, loaded only when --record flag present)  │
 ├─────────────────────────────────────────────────────────────────────┤
 │                      Output Layer                                    │
-│  Narrative mode (default): prose explanation of protocol + result   │
-│  Structured mode (--structured flag): typed output per CUE schema   │
+│  Narrative (default): prose explanation of protocol + result        │
+│  Structured (--structured): typed output per CUE schema             │
+│  Record (--record): #Record compatible with recording.cue           │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Component Responsibilities
 
-| Component | Responsibility | Typical Implementation |
-|-----------|----------------|------------------------|
-| SKILL.md | Entry point; frontmatter config; top-level instruction to Claude | YAML + markdown; references all sub-files by relative path |
-| routing.cue | Protocol selection logic; maps 14 problem features to 13 protocols | Read by Claude; no CUE runtime needed |
-| dialectics.cue (kernel) | Shared primitives: Rebuttal, Challenge, Derivation, ObligationGate, RevisionLoop, Finding | Read by Claude as type reference when executing any protocol |
-| Protocol .cue files (13) | Phase-by-phase execution schema for each protocol; defines what Claude must produce | Each read individually when that protocol is selected |
-| recording.cue | Standardizes completed runs into queryable records with dispute kind, resolution, dependencies, tags | Applied by Claude after protocol execution |
-| PROTOCOL_GUIDE.md (to create) | Human-readable quick reference mapping problem types to protocols | Supporting file loaded when Claude needs disambiguation help |
-| examples/ directory | Sample runs showing expected protocol execution patterns | Loaded on-demand when Claude needs to calibrate output format |
+| Component | Responsibility | Status |
+|-----------|---------------|--------|
+| `.claude-plugin/marketplace.json` (repo root) | Marketplace catalog: lists socrates plugin with `source: "./socrates"`, version, description | New in v1.1 |
+| `socrates/.claude-plugin/plugin.json` | Plugin manifest: name, version, author — enables `/plugin install` discovery | New in v1.1 |
+| `socrates/skills/socrates/SKILL.md` | Skill definition: frontmatter, preflight, routing instructions, protocol file references via `$CLAUDE_PLUGIN_ROOT` | Moved + modified in v1.1 |
+| `socrates/protocols/**/*.opt.cue` | Pre-built distribution files: stripped CUE schemas for runtime reading | Existing, unchanged content |
+| `socrates/hooks/hooks.json` | SessionStart hook config pointing to inject-context.sh | New in v1.1 |
+| `socrates/hooks/inject-context.sh` | Shell script: outputs `additionalContext` JSON at session start | New in v1.1 |
+| `socrates/scripts/strip_cue.py` | Build step: reads `dialectics/` source, writes `protocols/` distribution; maintainer-only | Existing, minor comment update |
+| `socrates/dialectics/` | Git submodule: upstream .cue source; dev-only; consumers never initialize it | Existing, unchanged |
+
+---
 
 ## Recommended Project Structure
 
+Target layout after v1.1. The repo root acts as the marketplace; `socrates/` is the plugin root.
+
 ```
-.claude/skills/socrates/
-├── SKILL.md                  # Entry point: frontmatter + top-level instructions
-├── ROUTING.md                # Prose routing guide (optional companion to routing.cue)
-├── protocols/
-│   └── (git submodule: riverline-labs/dialectics)
-│       ├── dialectics.cue            # Kernel primitives
+/                                       # repo root = marketplace
+├── .claude-plugin/
+│   └── marketplace.json                # NEW: marketplace catalog
+├── socrates/                           # plugin root (existing dir, restructured)
+│   ├── .claude-plugin/
+│   │   └── plugin.json                 # NEW: plugin manifest
+│   ├── skills/
+│   │   └── socrates/
+│   │       └── SKILL.md                # MOVED from socrates/SKILL.md
+│   │                                   #   + all path references updated
+│   ├── protocols/                      # UNCHANGED: pre-built files stay here
+│   │   ├── dialectics.opt.cue
+│   │   ├── routing.opt.cue
+│   │   ├── adversarial/
+│   │   │   ├── atp.opt.cue
+│   │   │   ├── cbp.opt.cue
+│   │   │   ├── cdp.opt.cue
+│   │   │   ├── cffp.opt.cue
+│   │   │   ├── emp.opt.cue
+│   │   │   └── hep.opt.cue
+│   │   ├── evaluative/
+│   │   │   ├── aap.opt.cue
+│   │   │   ├── cgp.opt.cue
+│   │   │   ├── ifa.opt.cue
+│   │   │   ├── ovp.opt.cue
+│   │   │   ├── ptp.opt.cue
+│   │   │   └── rcp.opt.cue
+│   │   └── exploratory/
+│   │       └── adp.opt.cue
+│   ├── hooks/                          # NEW: plugin hooks directory
+│   │   ├── hooks.json                  # NEW: hook config (SessionStart)
+│   │   └── inject-context.sh           # NEW: context injection script
+│   ├── scripts/
+│   │   └── strip_cue.py                # EXISTING: comment update only
+│   └── dialectics/                     # EXISTING: git submodule
+│       ├── dialectics.cue
 │       ├── governance/
-│       │   ├── routing.cue           # Protocol selection logic
-│       │   └── recording.cue         # Run record schema
-│       ├── protocols/
-│       │   ├── adversarial/
-│       │   │   ├── cffp.cue
-│       │   │   ├── cdp.cue
-│       │   │   ├── cbp.cue
-│       │   │   ├── hep.cue
-│       │   │   ├── atp.cue
-│       │   │   └── emp.cue
-│       │   ├── evaluative/
-│       │   │   ├── aap.cue
-│       │   │   ├── ifa.cue
-│       │   │   ├── rcp.cue
-│       │   │   ├── cgp.cue
-│       │   │   ├── ptp.cue
-│       │   │   └── ovp.cue
-│       │   └── exploratory/
-│       │       └── adp.cue
-│       └── examples/
-│           └── runs/               # Protocol execution examples
+│       │   ├── routing.cue
+│       │   └── recording.cue
+│       └── protocols/**/*.cue
+└── README.md                           # MODIFIED: add /plugin install instructions
 ```
 
 ### Structure Rationale
 
-- **.claude/skills/socrates/**: Claude Code discovers project-scoped skills in `.claude/skills/<name>/`. Using project scope (not personal `~/.claude/skills/`) means the skill ships with the repo and any contributor or deployment picks it up automatically.
-- **SKILL.md at root**: Required by the Claude Code skill contract. Must stay under 500 lines. Contains only: frontmatter, orientation instructions, and references to sub-files. Detail lives in sub-files.
-- **protocols/ as submodule**: The dialectics repo is owned by riverline-labs. Pulling it in as a git submodule keeps the skill in sync with upstream schema changes without copy drift. Claude navigates submodule files via the Read tool — this works today with explicit path references even though LS/Grep/Glob have submodule visibility gaps (tracked issue #7852 on anthropics/claude-code).
-- **No scripts/ directory needed**: This skill's execution is pure LLM reasoning — no Python/Bash scripts required. All behavior is prompt-driven.
+- **`.claude-plugin/` inside `socrates/`**: The plugin framework looks for `plugin.json` at `<plugin-root>/.claude-plugin/plugin.json`. Only `plugin.json` goes here. All other directories (`skills/`, `hooks/`, `protocols/`, `scripts/`) must be at the plugin root (`socrates/`), not inside `.claude-plugin/`.
+
+- **`.claude-plugin/` at repo root**: The marketplace.json lives here, making the entire repo a discoverable marketplace. This is separate from `socrates/.claude-plugin/plugin.json` — both dirs can coexist.
+
+- **`skills/socrates/SKILL.md`**: Plugin framework auto-discovers skills as `skills/<name>/SKILL.md`. The folder name becomes the skill name, which under a plugin becomes `/socrates` (the plugin name is `socrates`, skill name is `socrates`, combined as `socrates:socrates` — but since plugin name matches skill name, Claude Code may simplify this; verify during testing).
+
+- **`protocols/` stays at plugin root**: All `.opt.cue` files stay in `socrates/protocols/`. The plugin directory is cached wholesale to `~/.claude/plugins/cache/socrates/` on install, so `$CLAUDE_PLUGIN_ROOT/protocols/` resolves correctly without any symlinks.
+
+- **`dialectics/` submodule stays inside `socrates/`**: Consumers never need to initialize this submodule because `protocols/` has all pre-built files. However, the `--record` flag causes SKILL.md to read `$CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue`. This raw `.cue` file (not stripped) is inside the submodule. Since the submodule directory is copied into the plugin cache during install (as regular files, not as an active submodule), `recording.cue` will be available. The submodule is NOT excluded from the cache copy — verify this holds true during end-to-end install testing.
+
+- **`hooks/` at plugin root**: Default hook discovery path is `hooks/hooks.json`. No custom path configuration needed.
+
+---
 
 ## Architectural Patterns
 
-### Pattern 1: Progressive Disclosure via Referenced Sub-Files
+### Pattern 1: Source vs. Distribution Separation
 
-**What:** SKILL.md contains only high-level instructions and explicit `Read [file]` directives. Detailed schemas live in sub-files that Claude loads on-demand.
+**What:** Two parallel file trees exist for CUE content. `dialectics/` is the upstream source (annotated, versioned by the riverline-labs/dialectics submodule). `protocols/` is the distribution (stripped, committed, consumer-facing). `scripts/strip_cue.py` is the only bridge — a maintainer-only build step.
 
-**When to use:** Always. The Claude Code skill meta-tool injects full SKILL.md content on invocation. If SKILL.md contained all 13 protocol schemas, context bloat would be severe (13 protocols × ~200 lines each = 2600+ lines injected every time). Progressive disclosure means Claude only loads the selected protocol's .cue file.
+**When to use:** Any plugin that ships pre-processed assets to eliminate consumer build steps.
 
-**Trade-offs:** Context is lean; each protocol invocation costs ~300-500 tokens for routing + ~300 tokens for selected protocol, rather than 2600+ for all protocols upfront.
+**Trade-offs:**
+- Consumers get zero-setup install (correct for a plugin)
+- Committed build artifacts can diverge from source if maintainer forgets to rebuild after pulling submodule updates
+- Slightly larger repo from duplicate content (acceptable given file sizes)
 
-**Example:**
-```markdown
-## Execution Steps
-
-1. Read `protocols/governance/routing.cue` to select the protocol for the user's problem.
-2. Read `protocols/dialectics.cue` for kernel primitives.
-3. Read the selected protocol's .cue file (e.g., `protocols/protocols/adversarial/cffp.cue`).
-4. Execute the protocol's phases following the schema exactly.
-5. Read `protocols/governance/recording.cue` to structure the run record.
-6. Produce output in the requested mode (narrative or structured).
+**Build trigger:** Manual. After pulling submodule updates, maintainer runs:
+```bash
+cd /repo/socrates
+python scripts/strip_cue.py
+git add protocols/
+git commit -m "rebuild: update stripped protocols from dialectics vX.Y.Z"
 ```
 
-### Pattern 2: CUE-as-Spec Interpretation
+**Path correctness after restructure:** `strip_cue.py` computes `BASE_DIR = os.path.dirname(SCRIPT_DIR)`. After moving SKILL.md but keeping the script at `socrates/scripts/strip_cue.py`, `SCRIPT_DIR` = `socrates/scripts/` and `BASE_DIR` = `socrates/`. The FILE_MAP entries like `("dialectics/dialectics.cue", "protocols/dialectics.opt.cue")` resolve to `socrates/dialectics/dialectics.cue` → `socrates/protocols/dialectics.opt.cue`. No code changes needed in the script. Only the comment on line 21 (`# Script lives at .claude/skills/socrates/scripts/strip_cue.py`) needs updating.
 
-**What:** Claude reads CUE schema files as structured specifications and follows them as behavioral instructions, without any CUE toolchain at runtime. No `cue eval`, no CUE binary, no toolchain dependency.
+### Pattern 2: $CLAUDE_PLUGIN_ROOT Path Migration in SKILL.md
 
-**When to use:** Whenever the protocol logic is encoded in CUE. Claude treats `#CFFPInstance`, `#Challenge`, `#ObligationGate` etc. as type contracts it must satisfy when reasoning — not as code to execute.
+**What:** All Read tool path references in SKILL.md must migrate from the v1.0 standalone format to the plugin-relative format using `$CLAUDE_PLUGIN_ROOT`.
 
-**Trade-offs:** Zero runtime dependencies (correct for a Claude Code skill). The risk is schema drift if upstream CUE changes its idioms in ways Claude misinterprets; mitigate with example runs that demonstrate expected behavior.
+**Why:** When Claude Code installs a plugin from the marketplace, it copies the plugin to `~/.claude/plugins/cache/<plugin-name>/`. The old hardcoded path `.claude/skills/socrates/protocols/` no longer exists in the cache. Claude Code resolves `$CLAUDE_PLUGIN_ROOT` to the plugin's actual cache location before executing skill content.
 
-**Example:**
-```markdown
-The CFFP protocol defines `#ObligationGate` with a `satisfied: bool` field.
-When executing Phase 5, Claude must evaluate each obligation and explicitly
-mark `satisfied: true` or `satisfied: false` with a `blocker` if false —
-not skip the check or infer satisfaction implicitly.
+**Migration — exact substitution:**
+
+```
+Old (v1.0 standalone):   .claude/skills/socrates/protocols/
+New (v1.1 plugin):       $CLAUDE_PLUGIN_ROOT/protocols/
+
+Old (v1.0 standalone):   .claude/skills/socrates/dialectics/governance/recording.cue
+New (v1.1 plugin):       $CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue
 ```
 
-### Pattern 3: Routing Before Loading
+**Complete list of affected path occurrences in SKILL.md (~18 total):**
 
-**What:** Execute the routing step (read routing.cue, classify the problem, select a protocol) before loading any protocol file. This is a two-pass architecture: classify first, then load.
+| Line context | Old reference | New reference |
+|---|---|---|
+| Preflight read instruction | `.claude/skills/socrates/protocols/dialectics.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/dialectics.opt.cue` |
+| Preflight error message (2 mentions) | `.claude/skills/socrates/protocols/dialectics.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/dialectics.opt.cue` |
+| --record flag conditional read | `.claude/skills/socrates/dialectics/governance/recording.cue` | `$CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue` |
+| Protocol Files header | `.claude/skills/socrates/protocols/` | `$CLAUDE_PLUGIN_ROOT/protocols/` |
+| Kernel: dialectics.opt.cue | `.claude/skills/socrates/protocols/dialectics.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/dialectics.opt.cue` |
+| Routing: routing.opt.cue | `.claude/skills/socrates/protocols/routing.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/routing.opt.cue` |
+| 6 adversarial protocol paths | `.claude/skills/socrates/protocols/adversarial/<name>.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/adversarial/<name>.opt.cue` |
+| 6 evaluative protocol paths | `.claude/skills/socrates/protocols/evaluative/<name>.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/evaluative/<name>.opt.cue` |
+| 1 exploratory protocol path | `.claude/skills/socrates/protocols/exploratory/adp.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/exploratory/adp.opt.cue` |
+| Routing section read instruction | `.claude/skills/socrates/protocols/routing.opt.cue` | `$CLAUDE_PLUGIN_ROOT/protocols/routing.opt.cue` |
 
-**When to use:** Always. Routing is cheap (~300 tokens for routing.cue). Protocol files are moderately expensive. Never pre-load all 13 protocols.
+**Preflight error message update:** The current error says "Run: git submodule update --init --recursive". Plugin-installed consumers will never see this error (protocols/ is pre-committed). The error message should be updated to reflect the plugin context: if the file is missing, the plugin installation is corrupted and the user should reinstall.
 
-**Trade-offs:** Two reads (routing.cue, then selected protocol file) add minor latency but save significant context. Routing failures produce an explicit unroutable status that surfaces to the user as a clear message rather than a confused protocol execution.
+### Pattern 3: SessionStart Hook for Context Injection
 
-**Example:**
-```markdown
-After reading routing.cue, Claude identifies the primary structural feature
-(e.g., "term inconsistency") and maps it to the primary protocol (e.g., CBP).
-Only then does Claude read protocols/adversarial/cbp.cue to execute it.
+**What:** A `SessionStart` hook fires when Claude Code starts a session. The hook script outputs a JSON object with `hookSpecificOutput.additionalContext` — Claude Code prepends this string to Claude's context before any user interaction.
+
+**When to use:** When the skill should be available without explicit invocation, or when priming Claude's awareness of available tools at session start is valuable. Hooks run outside the context window — zero token overhead.
+
+**Implementation:**
+
+`socrates/hooks/hooks.json`:
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/inject-context.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
-### Pattern 4: Dual Output Modes via Flag
+`socrates/hooks/inject-context.sh`:
+```bash
+#!/usr/bin/env bash
+# Inject Socrates context at session start.
+# Uses printf for cross-platform JSON output (avoids echo -e portability issues).
+printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"The /socrates skill is available for structured dialectic reasoning. Invoke it when facing competing design candidates, argument stress-testing, assumption audits, causal claims, analogy evaluation, formalization, or possibility mapping. Use /socrates --structured for typed output, /socrates --record for audit trail format."}}\n'
+```
 
-**What:** SKILL.md detects whether `$ARGUMENTS` contains `--structured` and switches output format accordingly: narrative prose by default, typed structured output (matching the protocol's CUE output schema) when the flag is present.
+**Cross-platform requirements:**
+- Shebang must be `#!/usr/bin/env bash` (not `/bin/bash`) — `/bin/bash` absent on some systems
+- `printf` preferred over `echo` for JSON output — `echo` behavior with escape sequences varies across shells
+- `chmod +x inject-context.sh` required — Claude Code will silently skip non-executable hooks
+- Use `${CLAUDE_PLUGIN_ROOT}` (with braces) in `hooks.json` command strings — consistent with the plugin framework's variable expansion
 
-**When to use:** Skill design requiring two audiences — humans reading reasoning prose, tools consuming structured output.
+**Matcher choice:** `"matcher": "startup"` fires only on new sessions, not on `/resume`, `/clear`, or compaction. This is the right default — no need to re-inject context every time the user clears the conversation. If broader coverage is needed, omit the matcher entirely (fires on all `SessionStart` triggers).
 
-**Trade-offs:** Adds a branching instruction to SKILL.md; keep this explicit and early in the instructions so Claude doesn't miss it.
+**Trade-offs:**
+- Pro: Context available without explicit `/socrates` invocation at session start
+- Pro: Zero token overhead (runs as shell command outside context window)
+- Con: Fires for all projects where the plugin is enabled — if user-scoped installation, this runs in every session across all projects
 
-**Example:**
-```yaml
+### Pattern 4: Single-Repo Marketplace
+
+**What:** The repo root doubles as both the plugin source and the marketplace catalog. `marketplace.json` lives at `/.claude-plugin/marketplace.json` and points to `./socrates` as the plugin source.
+
+**Implementation:**
+
+`.claude-plugin/marketplace.json` (at repo root):
+```json
+{
+  "name": "socrates-marketplace",
+  "owner": {
+    "name": "riverline-labs"
+  },
+  "plugins": [
+    {
+      "name": "socrates",
+      "source": "./socrates",
+      "description": "Structured dialectic reasoning via /socrates. Auto-routes problems through 13 CUE-schema-defined protocols.",
+      "version": "1.1.0",
+      "repository": "https://github.com/riverline-labs/socrates"
+    }
+  ]
+}
+```
+
+Users install via:
+```
+/plugin marketplace add riverline-labs/socrates
+/plugin install socrates@socrates-marketplace
+```
+
+**Critical constraint:** Relative `source` paths only work when the marketplace is added via Git (e.g., `/plugin marketplace add owner/repo`). URL-based marketplace addition (`/plugin marketplace add https://example.com/marketplace.json`) does NOT download plugin files — only the JSON itself. The GitHub path form is the correct distribution approach here.
+
+**Version placement:** Set `version` only in `marketplace.json`, not in `plugin.json`. For relative-path plugins, the docs explicitly warn against setting it in both places — `plugin.json` always wins silently, causing the marketplace version to be ignored by update detection.
+
 ---
-name: socrates
-description: Applies structured dialectic reasoning protocols to any problem. Auto-routes to the appropriate protocol from the dialectics framework (CFFP, CDP, CBP, HEP, ATP, EMP, AAP, IFA, RCP, CGP, PTP, OVP, ADP). Use when you need rigorous, protocol-driven analysis.
-disable-model-invocation: true
-allowed-tools: Read
----
-
-## Output Mode
-
-If `$ARGUMENTS` ends with `--structured`, produce raw structured output
-matching the selected protocol's CUE output schema. Otherwise produce
-narrative output explaining the reasoning process and conclusion.
-```
 
 ## Data Flow
 
-### Request Flow
+### Build Flow (Maintainer Only)
 
 ```
-User: /socrates "Should we use PostgreSQL or DynamoDB for this service?" [--structured]
+riverline-labs/dialectics (upstream GitHub)
     |
+    | git submodule update --remote
     v
-SKILL.md loads into conversation context
+socrates/dialectics/**/*.cue   (raw annotated source)
     |
+    | python socrates/scripts/strip_cue.py
     v
-Claude reads routing.cue
-  → identifies feature: "competing candidates" (candidate selection problem)
-  → selects primary protocol: CDP (Candidate Decomposition Protocol)
+socrates/protocols/**/*.opt.cue  (stripped distribution files)
     |
+    | git add protocols/ && git commit
     v
-Claude reads dialectics.cue (kernel primitives)
-  → loads #Rebuttal, #Challenge, #Derivation, #ObligationGate types
-    |
-    v
-Claude reads protocols/evaluative/cdp.cue
-  → loads CDP's phase structure and schema
-    |
-    v
-Claude executes CDP phases:
-  Phase 1 → Phase 2 → Phase 3 → [Phase 3b if zero survivors] → Phase 4 → ...
-    |
-    v
-Claude reads recording.cue
-  → structures the run into a #Record with dispute kind, resolution, tags
-    |
-    v
-Output:
-  narrative mode → prose explanation of reasoning + conclusion
-  structured mode → typed record matching CUE output schema
+Committed to repo — always install-ready
 ```
 
-### State Management
+### Consumer Install Flow
 
 ```
-No persistent state. Each /socrates invocation is stateless.
-
-Within one invocation:
-  Routing result → passed in-context to protocol loading step
-  Protocol execution → produces in-context run record
-  Run record → serialized to output (narrative or structured)
-
-Cross-invocation recording (future):
-  recording.cue defines #Record schema for queryable logs
-  Implementation would require a separate storage layer (not in v1)
+/plugin marketplace add riverline-labs/socrates
+    |
+    | Claude Code clones repo
+    v
+~/.claude/plugins/cache/socrates/
+  skills/socrates/SKILL.md
+  protocols/**/*.opt.cue
+  hooks/hooks.json + inject-context.sh
+  dialectics/governance/recording.cue
+  (no submodule init needed — files copied as-is)
+    |
+    | Plugin enabled
+    v
+hooks registered → SessionStart fires on next session start
+/socrates available in slash command menu
 ```
 
-### Key Data Flows
+### Runtime Flow (per /socrates invocation)
 
-1. **Problem to protocol:** User's problem text → routing.cue feature classification → protocol name → protocol .cue file load
-2. **Protocol execution:** dialectics.cue primitives + selected protocol phases → Claude's reasoning → populated schema fields → run record
-3. **Run record to output:** Completed run → recording.cue schema → narrative or structured output
+```
+Session start:
+  SessionStart hook → inject-context.sh → additionalContext in Claude's context
+      (primes Claude about /socrates availability)
 
-## Scaling Considerations
+/socrates <problem> [flags]:
+    |
+    v
+SKILL.md loaded from $CLAUDE_PLUGIN_ROOT/skills/socrates/SKILL.md
+    |
+    v
+Preflight: Claude reads $CLAUDE_PLUGIN_ROOT/protocols/dialectics.opt.cue
+  (if missing → error message → stop)
+    |
+    | (if --record flag)
+    v
+Claude reads $CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue
+    |
+    v
+Claude reads $CLAUDE_PLUGIN_ROOT/protocols/routing.opt.cue
+  → selects protocol based on structural features
+    |
+    v
+Claude reads $CLAUDE_PLUGIN_ROOT/protocols/<category>/<name>.opt.cue
+  → executes selected protocol phases
+    |
+    v
+Output: narrative | structured | record
+```
 
-| Scale | Architecture Adjustments |
-|-------|--------------------------|
-| 1 user, ~10 invocations/day | Current architecture is sufficient. No state, no storage, no backend needed. |
-| 10 users, ~100 invocations/day | Same. Stateless skills scale horizontally by nature — each Claude Code session is independent. |
-| Cross-session run history | Would require a storage layer (not in scope v1). recording.cue defines the record schema; a future companion tool could persist records to a file or database. |
-
-### Scaling Priorities
-
-1. **First bottleneck: Context budget.** If SKILL.md grows beyond 500 lines, split content into referenced sub-files. The SKILL.md stays lean; protocol schemas stay in dialectics submodule.
-2. **Second bottleneck: Submodule staleness.** As the dialectics framework evolves, the submodule pin needs updating. Use `git submodule update --remote` to pull changes, then test protocol execution against examples/.
-
-## Anti-Patterns
-
-### Anti-Pattern 1: Embedding All Protocol Schemas in SKILL.md
-
-**What people do:** Copy all 13 .cue protocol files into SKILL.md for "convenience."
-**Why it's wrong:** The Claude Code skill meta-tool injects the full SKILL.md body into context on every invocation. 13 protocols × ~200 lines ≈ 2600+ lines injected every single time, most of it unused. This saturates context and degrades reasoning on the actual problem.
-**Do this instead:** Keep SKILL.md under 200 lines. Reference sub-files explicitly. Claude loads only the selected protocol per invocation.
-
-### Anti-Pattern 2: Copying Dialectics .cue Files Instead of Submodule
-
-**What people do:** Copy `protocols/*.cue` into the skill directory to avoid submodule complexity.
-**Why it's wrong:** Copied files drift from upstream. The dialectics framework's protocol schemas will evolve. Running on stale schemas means executing protocols that may have breaking changes in their phase structure or type contracts.
-**Do this instead:** Use `git submodule add https://github.com/riverline-labs/dialectics.git .claude/skills/socrates/protocols`. One `git submodule update --remote` stays current.
-
-### Anti-Pattern 3: Implicit Routing (Let Claude Guess)
-
-**What people do:** Skip routing.cue and let Claude pick a protocol based on vibes.
-**Why it's wrong:** routing.cue encodes 14 structural features, explicit feature-to-protocol mappings, confidence levels, disambiguation rules for conflicting features, and sequential execution conditions. Skipping this means Claude free-associates instead of applying the formal classification logic. Protocol fidelity breaks down on ambiguous inputs.
-**Do this instead:** Make reading routing.cue the mandatory first step. Treat the routing output (primary protocol, confidence, sequencing needs) as a structured intermediate result, not a soft suggestion.
-
-### Anti-Pattern 4: Skipping the Kernel (dialectics.cue)
-
-**What people do:** Jump directly to a protocol .cue file without reading dialectics.cue first.
-**Why it's wrong:** Protocol files reference kernel types: `#Rebuttal`, `#Challenge`, `#Derivation`, `#ObligationGate`, `#RevisionLoop`, `#Finding`. Without loading the kernel, Claude has no definition for these types and must infer their structure from context, which produces inconsistent execution across protocols.
-**Do this instead:** Always read dialectics.cue before reading any protocol file. It is cheap (~100 lines) and provides the shared type vocabulary that makes all protocol schemas unambiguous.
-
-### Anti-Pattern 5: allow-model-invocation: true for /socrates
-
-**What people do:** Leave out `disable-model-invocation: true`, so Claude auto-invokes the socrates skill whenever it judges the conversation is "philosophical" or "analytical."
-**Why it's wrong:** Dialectic protocol execution is heavyweight — it takes multiple reasoning passes and produces structured output. Claude should not invoke a full CFFP or CDP cycle because the user casually asked "which approach do you think is better?" Auto-invocation should be the user's explicit choice.
-**Do this instead:** Set `disable-model-invocation: true`. `/socrates` is a power tool users invoke deliberately, not a background advisory skill Claude loads opportunistically.
+---
 
 ## Integration Points
 
-### External Services
+### New Files (Create in v1.1)
 
-| Service | Integration Pattern | Notes |
-|---------|---------------------|-------|
-| riverline-labs/dialectics | Git submodule pinned to main | Read via Read tool; no CUE runtime needed |
-| Claude Code skill system | SKILL.md in `.claude/skills/socrates/` | Project-scoped skill; ships with repo |
+| File | Purpose | Notes |
+|------|---------|-------|
+| `socrates/.claude-plugin/plugin.json` | Plugin manifest | `name`, `version`, `description`, `author` only. No `version` — set in marketplace.json instead |
+| `socrates/hooks/hooks.json` | SessionStart hook config | Points to `${CLAUDE_PLUGIN_ROOT}/hooks/inject-context.sh` |
+| `socrates/hooks/inject-context.sh` | Context injection script | Must be executable (`chmod +x`); outputs additionalContext JSON |
+| `.claude-plugin/marketplace.json` | Marketplace catalog at repo root | `source: "./socrates"` relative path — only works via git-based marketplace add |
 
-### Internal Boundaries
+### Modified Files (Update in v1.1)
 
-| Boundary | Communication | Notes |
-|----------|---------------|-------|
-| SKILL.md -> routing.cue | Claude reads file via Read tool; in-context reasoning | SKILL.md must include explicit instruction to read routing.cue first |
-| SKILL.md -> dialectics.cue | Claude reads file via Read tool | Load after routing, before protocol file |
-| SKILL.md -> protocol .cue file | Claude reads file via Read tool; path determined by routing result | Path construction: `protocols/protocols/{category}/{name}.cue` |
-| Protocol execution -> recording.cue | Claude reads file via Read tool after protocol phases complete | Optional in v1; required for --structured mode with full record schema |
-| User arguments -> output mode | `$ARGUMENTS` string substitution in SKILL.md | Parse `--structured` flag early; branch instruction is in SKILL.md |
+| File | Change Required | Scope |
+|------|----------------|-------|
+| `socrates/SKILL.md` | **Move** to `socrates/skills/socrates/SKILL.md` AND replace all ~18 path occurrences of `.claude/skills/socrates/` with `$CLAUDE_PLUGIN_ROOT/` — also update preflight error message | High-touch but mechanical |
+| `socrates/scripts/strip_cue.py` | Update comment on line 21 from old path to `socrates/scripts/strip_cue.py`. No functional changes. | Trivial |
+| `README.md` | Add `/plugin install` instructions, remove or annotate old `.claude/skills/` setup instructions | Documentation only |
 
-## Build Order Implications
+### Unchanged (No Action Required)
 
-The architecture implies a clear dependency order for implementation:
+| File | Status |
+|------|--------|
+| `socrates/protocols/**/*.opt.cue` (15 files) | Content unchanged — only their reference paths in SKILL.md change |
+| `socrates/dialectics/` (submodule) | Unchanged — stays at same location inside plugin root |
+| `socrates/scripts/strip_cue.py` (logic) | Path computation works correctly after restructure — BASE_DIR resolves to `socrates/` |
 
-1. **Submodule setup first** — the dialectics repo must be added as a submodule before any skill logic can reference protocol files
-2. **SKILL.md skeleton second** — frontmatter, output mode detection, and the Read tool call sequence can be written independently of protocol content
-3. **Routing integration third** — verify Claude correctly reads routing.cue and selects protocols before writing any protocol execution logic
-4. **Protocol execution fourth** — start with one representative protocol (CDP or CFFP) to validate the read-kernel → read-protocol → execute-phases pattern works end-to-end
-5. **Remaining protocols fifth** — once the single-protocol path is validated, the other 12 protocols follow the same pattern; no new infrastructure required
-6. **Recording integration last** — recording.cue is needed for structured output mode; implement after narrative output is confirmed working
+---
+
+## Suggested Build Order for Phases
+
+Four sequential phases with hard dependencies:
+
+```
+Phase A — Plugin Manifest + Directory Restructure
+  1. Create socrates/.claude-plugin/plugin.json
+  2. Create socrates/skills/socrates/ directory
+  3. Move socrates/SKILL.md to socrates/skills/socrates/SKILL.md
+     (DO NOT update paths yet — verify structure first)
+  4. Test: claude --plugin-dir ./socrates
+     → /socrates should appear in command list
+     → preflight will fail (old paths), confirming structure is wired
+  Dependencies: None — first phase
+
+Phase B — Path Migration in SKILL.md
+  1. Replace all .claude/skills/socrates/ → $CLAUDE_PLUGIN_ROOT/
+     (18 occurrences, mechanical find/replace)
+  2. Update preflight error message for plugin context
+  3. Test: claude --plugin-dir ./socrates, then /socrates <problem>
+     → Full execution must succeed end-to-end
+  Dependencies: Phase A complete and plugin loading verified
+
+Phase C — SessionStart Hook
+  1. Create socrates/hooks/hooks.json
+  2. Create socrates/hooks/inject-context.sh
+  3. chmod +x socrates/hooks/inject-context.sh
+  4. Test: claude --plugin-dir ./socrates
+     → At session start, verify additionalContext appears
+  5. Test cross-platform hook script (bash portability)
+  Dependencies: Phase A + B complete (clean plugin baseline before adding hooks)
+
+Phase D — Marketplace Structure
+  1. Create .claude-plugin/marketplace.json at repo root
+  2. Test local: /plugin marketplace add ./  then /plugin install socrates@socrates-marketplace
+  3. Push to GitHub
+  4. Test remote: /plugin marketplace add <github-org>/<repo>
+     → Consumer install with no submodule init, no build step
+  5. Verify recording.cue readable after install (--record flag test)
+  Dependencies: Phases A + B + C complete — validates full install path
+```
+
+**Why this order:**
+- A before B: Moving the file first, then patching it, avoids editing a file that gets moved. Simpler git history. The failing preflight (wrong paths) confirms the directory structure is wired before path migration begins.
+- B before C: Hook testing requires the skill to work correctly under plugin paths. Testing both at once makes failures harder to isolate.
+- D last: The marketplace end-to-end test (`/plugin install`) validates everything: manifest, skill paths, hooks, and pre-built files all working together without submodule init.
+
+---
+
+## Anti-Patterns
+
+### Anti-Pattern 1: Directories Inside .claude-plugin/
+
+**What people do:** Place `skills/`, `hooks/`, or `protocols/` inside `.claude-plugin/` alongside `plugin.json`.
+
+**Why it's wrong:** Claude Code only looks for `plugin.json` inside `.claude-plugin/`. All other plugin component directories must be at the plugin root (e.g., `socrates/skills/`, `socrates/hooks/`). Components inside `.claude-plugin/` are silently ignored.
+
+**Do this instead:** Only `plugin.json` (and `marketplace.json`) go inside `.claude-plugin/`. Everything else goes at the plugin root.
+
+### Anti-Pattern 2: Hardcoded Paths in SKILL.md After Plugin Conversion
+
+**What people do:** Leave `.claude/skills/socrates/protocols/` paths in SKILL.md after packaging as a plugin, or use `./protocols/` relative paths.
+
+**Why it's wrong:** The plugin cache location (`~/.claude/plugins/cache/socrates/`) differs from the standalone path (`.claude/skills/socrates/`). Relative paths (`./protocols/`) resolve relative to the working directory at invocation time, not to the plugin root. Both fail silently — the Read tool returns empty, the preflight fires, and the skill aborts with a misleading setup error.
+
+**Do this instead:** All Read tool path instructions in SKILL.md must use `$CLAUDE_PLUGIN_ROOT/protocols/...`. Claude Code resolves this variable to the plugin's actual cache location before executing skill content.
+
+### Anti-Pattern 3: Setting Version in Both plugin.json and marketplace.json
+
+**What people do:** Define `"version": "1.1.0"` in both `socrates/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`.
+
+**Why it's wrong:** `plugin.json` version always wins silently. When the maintainer bumps the marketplace version (e.g., for a patch) but forgets `plugin.json`, Claude Code's update detection sees no change and existing users never receive the update.
+
+**Do this instead:** For relative-path plugins, set version only in `marketplace.json`. Omit `version` from `plugin.json` entirely.
+
+### Anti-Pattern 4: Moving dialectics/ Outside the Plugin Root
+
+**What people do:** Move the `dialectics/` submodule to the repo root (above `socrates/`) to avoid including it in the plugin install cache.
+
+**Why it's wrong:** Plugin caching copies only the plugin root directory. Files outside `socrates/` are not copied. SKILL.md references `$CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue` for the `--record` flag — if that file is above the plugin root, it is absent in the cache and the `--record` flag silently fails.
+
+**Do this instead:** Keep `dialectics/` inside `socrates/`. Consumers never need to initialize the submodule (protocols/ has the pre-built files), but the raw `recording.cue` (not processed by strip_cue.py) must be accessible at `$CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue` for the --record path.
+
+### Anti-Pattern 5: URL-Based Marketplace Distribution for Relative-Path Plugins
+
+**What people do:** Distribute the marketplace by sharing a raw URL to `marketplace.json` (e.g., a GitHub raw file URL) and instructing users to `/plugin marketplace add <url>`.
+
+**Why it's wrong:** URL-based marketplace add downloads only the `marketplace.json` file. It does not clone the repository. The `source: "./socrates"` relative path references files that are not downloaded — plugin installation fails with "path not found".
+
+**Do this instead:** Distribute via the GitHub repository path: `/plugin marketplace add riverline-labs/socrates`. This triggers a git clone of the full repo, making relative paths work.
+
+---
+
+## Scaling Considerations
+
+This is a plugin with no server-side infrastructure — scaling means "more users installing the plugin", not "more load on a service".
+
+| Concern | Now (< 100 installs) | Later (1k+ installs) |
+|---------|---------------------|---------------------|
+| Plugin distribution | Single-repo marketplace is sufficient | Same approach scales indefinitely — git clone is stateless |
+| Protocol updates | Manual build step + commit | Consider adding a pre-commit hook or CI step to auto-rebuild when dialectics/ changes |
+| Submodule drift | Manual `git submodule update --remote` + rebuild | Pin submodule to tagged releases rather than main for stability |
+| Plugin version updates | Users update with `/plugin update socrates@socrates-marketplace` | No changes needed — standard plugin versioning handles this |
+
+---
 
 ## Sources
 
-- Claude Code official skills documentation: https://code.claude.com/docs/en/skills (HIGH confidence — official)
-- Claude Agent Skills deep dive (internal architecture): https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/ (MEDIUM confidence — third-party verified against official docs)
-- Claude Code skills structure and invocation: https://mikhail.io/2025/10/claude-code-skills/ (MEDIUM confidence — third-party)
-- riverline-labs/dialectics repository: https://github.com/riverline-labs/dialectics (HIGH confidence — primary source)
-- Claude Code git submodule limitation tracking: https://github.com/anthropics/claude-code/issues/7852 (MEDIUM confidence — GitHub issue)
-- Anthropic official skills examples: https://github.com/anthropics/skills (HIGH confidence — official)
+- [Claude Code Plugins Reference](https://code.claude.com/docs/en/plugins-reference) — HIGH confidence, official docs. Manifest schema, directory layout rules (CRITICAL: components must be at plugin root, not inside .claude-plugin/), `$CLAUDE_PLUGIN_ROOT` variable, path traversal constraints, version management warning.
+- [Create Plugins](https://code.claude.com/docs/en/plugins) — HIGH confidence, official docs. Plugin structure walkthrough, `skills/` directory autodiscovery, migration from standalone `.claude/` to plugin, `--plugin-dir` testing flag.
+- [Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) — HIGH confidence, official docs. `marketplace.json` schema, relative-path source constraints, single-repo marketplace pattern, version-in-one-place warning.
+- [Hooks Reference](https://code.claude.com/docs/en/hooks) — HIGH confidence, official docs. `SessionStart` event, `additionalContext` field, `${CLAUDE_PLUGIN_ROOT}` in command strings, `matcher` values, hook location scoping.
+- [Skills Reference](https://code.claude.com/docs/en/skills) — HIGH confidence, official docs. SKILL.md format, `$CLAUDE_PLUGIN_ROOT` in skill content, `allowed-tools` frontmatter, plugin skill namespacing (`plugin-name:skill-name`).
 
 ---
-*Architecture research for: Socrates — Claude Code dialectic reasoning skill*
-*Researched: 2026-02-28*
+
+*Architecture research for: Socrates v1.1 plugin distribution infrastructure*
+*Researched: 2026-03-01*
