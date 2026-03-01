@@ -91,7 +91,7 @@ Plans:
 **Milestone Goal:** Make Socrates installable via `/plugin` from a marketplace — single-repo, pre-built protocol files, zero consumer setup.
 
 - [ ] **Phase 6: Plugin Scaffold and Path Migration** - Plugin manifest created, directory restructured, all SKILL.md path references migrated to `$CLAUDE_PLUGIN_ROOT`
-- [ ] **Phase 7: Pre-Built Protocol Files** - All 15 `.opt.cue` files committed to git and verified present after a clean plugin install
+- [x] **Phase 7: Pre-Built Protocol Files** - All 15 `.opt.cue` files committed to git and verified present after a clean plugin install (completed 2026-03-01)
 - [ ] **Phase 8: Session Hook** - Cross-platform SessionStart hook injects skill context automatically on session open, resume, and clear
 - [ ] **Phase 9: Marketplace Wiring and End-to-End Validation** - `marketplace.json` published, full install flow verified via `/plugin marketplace add` and `/plugin install`
 
@@ -158,6 +158,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 4. Structured Output | v1.0 | 1/1 | Complete | 2026-02-28 |
 | 5. Schema Conformance | v1.0 | 1/1 | Complete | 2026-02-28 |
 | 6. Plugin Scaffold and Path Migration | v1.1 | 0/? | Not started | - |
-| 7. Pre-Built Protocol Files | v1.1 | 0/? | Not started | - |
+| 7. Pre-Built Protocol Files | 1/1 | Complete   | 2026-03-01 | - |
 | 8. Session Hook | v1.1 | 0/? | Not started | - |
 | 9. Marketplace Wiring and E2E Validation | v1.1 | 0/? | Not started | - |

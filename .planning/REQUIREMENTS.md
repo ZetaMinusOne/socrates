@@ -54,9 +54,9 @@ Requirements for plugin distribution milestone. Each maps to roadmap phases.
 
 ### Build & Distribution
 
-- [ ] **BLDG-01**: User can install the plugin without running `git submodule update --init` or any build step
-- [ ] **BLDG-02**: All 15 pre-built `.opt.cue` files (13 protocols + dialectics + routing) are committed to git and present in the repo
-- [ ] **BLDG-03**: Developer can run a build command (Makefile) to regenerate `.opt.cue` files from the dialectics submodule
+- [x] **BLDG-01**: User can install the plugin without running `git submodule update --init` or any build step
+- [x] **BLDG-02**: All 15 pre-built `.opt.cue` files (13 protocols + dialectics + routing) are committed to git and present in the repo
+- [x] **BLDG-03**: Developer can run a build command (Makefile) to regenerate `.opt.cue` files from the dialectics submodule
 
 ### Session Hook
 
@@ -127,9 +127,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PATH-01 | Phase 6 | Complete |
 | PATH-02 | Phase 6 | Complete |
 | PATH-03 | Phase 6 | Complete |
-| BLDG-01 | Phase 7 | Pending |
-| BLDG-02 | Phase 7 | Pending |
-| BLDG-03 | Phase 7 | Pending |
+| BLDG-01 | Phase 7 | Complete |
+| BLDG-02 | Phase 7 | Complete |
+| BLDG-03 | Phase 7 | Complete |
 | HOOK-01 | Phase 8 | Pending |
 | HOOK-02 | Phase 8 | Pending |
 | HOOK-03 | Phase 8 | Pending |

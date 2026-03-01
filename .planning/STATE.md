@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Plugin Distribution
-status: unknown
-last_updated: "2026-03-01T19:07:10Z"
+status: in_progress
+last_updated: "2026-03-01T20:48:30Z"
 progress:
-  total_phases: 6
+  total_phases: 9
   completed_phases: 6
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 10
+  completed_plans: 10
 ---
 
 # Project State
@@ -18,21 +18,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** Users get rigorous, protocol-driven reasoning on any problem without needing to know which dialectic method to apply
-**Current focus:** v1.1 Plugin Distribution — Phase 6: Plugin Scaffold and Path Migration
+**Current focus:** v1.1 Plugin Distribution — Phase 7: Pre-Built Protocol Files
 
 ## Current Position
 
-Phase: 6 of 9 (Plugin Scaffold and Path Migration) — COMPLETE
-Plan: 2 of 2 complete in current phase
-Status: Phase 6 complete — ready for Phase 7 (pre-built protocol files)
-Last activity: 2026-03-01 — 06-02 complete: all 24 path references migrated to $CLAUDE_PLUGIN_ROOT/socrates/, end-to-end verified
+Phase: 7 of 9 (Pre-Built Protocol Files) — COMPLETE
+Plan: 1 of 1 complete in current phase
+Status: Phase 7 complete — ready for Phase 8 (SessionStart hook)
+Last activity: 2026-03-01 — 07-01 complete: all 15 .opt.cue protocol files committed, make check target added, Makefile and strip_cue.py tracked
 
-Progress: [██████░░░░] 67% (v1.0 complete, Phase 6 all 2 plans done)
+Progress: [███████░░░] 75% (v1.0 complete, Phases 6-7 done)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7 (all v1.0)
+- Total plans completed: 10 (7 v1.0 + 3 v1.1)
 - Average duration: —
 - Total execution time: —
 
@@ -41,10 +41,10 @@ Progress: [██████░░░░] 67% (v1.0 complete, Phase 6 all 2 pla
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | v1.0 Phases 1-5 | 7/7 | — | — |
-| v1.1 Phases 6-9 | 2/? | — | — |
+| v1.1 Phases 6-9 | 3/? | — | — |
 
 **Recent Trend:**
-- Last 5 plans: v1.0 all complete; 06-01 complete (~18 min); 06-02 complete (~8 min)
+- Last 5 plans: v1.0 all complete; 06-01 complete (~18 min); 06-02 complete (~8 min); 07-01 complete (~5 min)
 - Trend: Stable
 
 **Execution Log:**
@@ -53,6 +53,7 @@ Progress: [██████░░░░] 67% (v1.0 complete, Phase 6 all 2 pla
 |------|----------|-------|-------|
 | Phase 06 P01 | 18min | 2 tasks | 3 files |
 | Phase 06 P02 | 8min | 2 tasks | 1 file |
+| Phase 07 P01 | 5min | 2 tasks | 17 files |
 
 *Updated after each plan completion*
 
@@ -74,6 +75,9 @@ Recent decisions affecting current work:
 - [06-01 CONFIRMED] /socrates invocation form works after plugin install — autocomplete shows /socrates-skill:socrates but /socrates also resolves correctly. Bug #17271 does not block usage.
 - [06-02 COMPLETE] All 24 .claude/skills/socrates/ path references migrated to $CLAUDE_PLUGIN_ROOT/socrates/ in SKILL.md. Preflight error message updated for plugin installs (no submodule language). End-to-end verified: preflight passes, protocol execution works via --plugin-dir.
 - [06-02] Preflight error message path reference removed entirely rather than migrated — plugin users don't benefit from knowing $CLAUDE_PLUGIN_ROOT paths. Net count: 24 old refs removed, 23 new refs added.
+- [07-01] Freshly ran make build immediately before git add — ensures committed files match current dialectics submodule HEAD, not stale from prior session
+- [07-01] make check uses in-place regeneration + git diff --exit-code — leverages strip_cue.py idempotency, no temp directory needed
+- [07-01] Makefile and scripts/strip_cue.py tracked in same phase as protocol files — build infrastructure must be versioned alongside artifacts it produces
 
 ### Pending Todos
 
@@ -89,5 +93,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Phase 6 complete (both plans done) — ready for Phase 7 (pre-built protocol files)
+Stopped at: Phase 7 complete (1 of 1 plans done) — ready for Phase 8 (SessionStart hook)
 Resume file: None
