@@ -133,7 +133,9 @@ Plans:
   1. After plugin install, running `/clear` in Claude Code causes the SessionStart hook to fire and inject SKILL.md content as `additionalContext` — Claude responds to `/socrates` without needing to read SKILL.md manually
   2. The hook executes correctly on macOS, Linux, and Windows via the `run-hook.cmd` polyglot dispatcher calling an extensionless `session-start` script
   3. All shell scripts in `socrates/hooks/` have LF line endings enforced by `.gitattributes` — no CRLF contamination on Windows checkout
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 08-01-PLAN.md — Create SessionStart hook files (hooks.json, session-start script, .gitattributes) and verify correctness
 
 ### Phase 9: Marketplace Wiring and End-to-End Validation
 **Goal**: Any user can install Socrates with two commands — add the marketplace and install the plugin — and get a fully working skill with zero additional setup
