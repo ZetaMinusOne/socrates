@@ -5,14 +5,36 @@
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** Users get rigorous, protocol-driven reasoning on any problem without needing to know which dialectic method to apply
-**Current focus:** Milestone v1.1 — Plugin Distribution
+**Current focus:** v1.1 Plugin Distribution — Phase 6: Plugin Scaffold and Path Migration
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-01 — Milestone v1.1 started
+Phase: 6 of 9 (Plugin Scaffold and Path Migration)
+Plan: 0 of ? in current phase
+Status: Ready to plan
+Last activity: 2026-03-01 — v1.1 roadmap created, phases 6-9 defined
+
+Progress: [█████░░░░░] 56% (v1.0 complete, v1.1 starting)
+
+## Performance Metrics
+
+**Velocity:**
+- Total plans completed: 7 (all v1.0)
+- Average duration: —
+- Total execution time: —
+
+**By Phase:**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| v1.0 Phases 1-5 | 7/7 | — | — |
+| v1.1 Phases 6-9 | 0/? | — | — |
+
+**Recent Trend:**
+- Last 5 plans: v1.0 all complete
+- Trend: Stable
+
+*Updated after each plan completion*
 
 ## Accumulated Context
 
@@ -21,20 +43,13 @@ Last activity: 2026-03-01 — Milestone v1.1 started
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- Claude interprets CUE schemas directly (no runtime): Simpler distribution, no toolchain dependency
-- Git submodule for .cue files (dev-only): Stays in sync with upstream, no copy drift
-- Narrative output by default: More accessible; structured output available via flag for power users
-- Auto-routing via governance/routing.cue: Users describe problems, skill handles protocol selection
-- Submodule placed inside skill directory (socrates/dialectics) for self-contained dependency
-- Preflight check reads protocols/dialectics.opt.cue to validate both submodule AND stripped file generation
-- SKILL.md references .opt.cue paths (not raw dialectics/ paths) — raw files are source-of-truth, opt files for invocation
-- Block comment threshold: 3+ consecutive //-only lines = documentation block (stripped); 1-2 lines = semantic field description (preserved)
-- Protocol full names embedded as lookup table in SKILL.md routing section (not read from .opt.cue files): avoids 13 unnecessary Read calls per invocation
-- routing.opt.cue inline comments used as authoritative routing table
-- Schema-directed execution in SKILL.md: Claude reads .opt.cue file and follows its type definitions
 - Single-repo marketplace: this repo is both plugin and marketplace
-- Pre-built protocol files committed to git: repo is always install-ready
-- Build step replaces submodule for consumers: they never run submodule init
+- Pre-built protocol files committed to git: repo is always install-ready; consumers never run submodule init
+- Plugin name must differ from marketplace name: avoids Linux EXDEV bug (issue #24389)
+- $CLAUDE_PLUGIN_ROOT unset at hook runtime: derive path from BASH_SOURCE[0] inside session-start script
+- SessionStart hook unreliable for brand new conversations (bug #10373): skill must remain self-sufficient without hook
+- Version set only in marketplace.json for relative-path plugins: setting in plugin.json silently overrides
+- SKILL.md moved to socrates/skills/socrates/SKILL.md for plugin autodiscovery conventions
 
 ### Pending Todos
 
@@ -42,10 +57,13 @@ None yet.
 
 ### Blockers/Concerns
 
-None.
+- [Phase 8] SessionStart hook fires on /clear and resume but NOT for brand new conversations (bug #10373) — design hook as enhancement only; skill must work without it
+- [Phase 8] $CLAUDE_PLUGIN_ROOT is unset during SessionStart shell execution (bug #27145) — must use BASH_SOURCE[0] workaround
+- [Phase 8] hookSpecificOutput.additionalContext may not reach Claude from plugin-based hooks (bug #16538) — verify before investing in full implementation
+- [Phase 6] Exact slash command invocation form after plugin install is uncertain (bug #17271) — must test with --plugin-dir before any other work
 
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Starting milestone v1.1 — defining requirements
+Stopped at: v1.1 roadmap created — ready to plan Phase 6
 Resume file: None

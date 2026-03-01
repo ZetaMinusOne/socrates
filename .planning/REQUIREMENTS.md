@@ -120,26 +120,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OUTP-01 | Phase 3 | Complete |
 | OUTP-02 | Phase 5 | Complete |
 | OUTP-03 | Phase 5 | Complete |
-| PLUG-01 | — | Pending |
-| PLUG-02 | — | Pending |
-| PLUG-03 | — | Pending |
-| PLUG-04 | — | Pending |
-| PATH-01 | — | Pending |
-| PATH-02 | — | Pending |
-| PATH-03 | — | Pending |
-| BLDG-01 | — | Pending |
-| BLDG-02 | — | Pending |
-| BLDG-03 | — | Pending |
-| HOOK-01 | — | Pending |
-| HOOK-02 | — | Pending |
-| HOOK-03 | — | Pending |
+| PLUG-01 | Phase 9 | Pending |
+| PLUG-02 | Phase 9 | Pending |
+| PLUG-03 | Phase 6 | Pending |
+| PLUG-04 | Phase 6 | Pending |
+| PATH-01 | Phase 6 | Pending |
+| PATH-02 | Phase 6 | Pending |
+| PATH-03 | Phase 6 | Pending |
+| BLDG-01 | Phase 7 | Pending |
+| BLDG-02 | Phase 7 | Pending |
+| BLDG-03 | Phase 7 | Pending |
+| HOOK-01 | Phase 8 | Pending |
+| HOOK-02 | Phase 8 | Pending |
+| HOOK-03 | Phase 8 | Pending |
 
 **Coverage:**
 - v1.0 requirements: 16 total (all complete)
 - v1.1 requirements: 13 total
-- Mapped to phases: 16 (v1.0) + 0 (v1.1, pending roadmap)
-- Unmapped: 13 (v1.1)
+- Mapped to phases: 16 (v1.0) + 13 (v1.1)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-03-01 after milestone v1.1 requirements definition*
+*Last updated: 2026-03-01 after milestone v1.1 roadmap creation*
