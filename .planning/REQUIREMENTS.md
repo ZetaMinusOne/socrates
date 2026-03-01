@@ -48,9 +48,9 @@ Requirements for plugin distribution milestone. Each maps to roadmap phases.
 
 ### Path Migration
 
-- [ ] **PATH-01**: User can invoke `/socrates` after plugin install and all protocol file reads resolve correctly via `$CLAUDE_PLUGIN_ROOT`
-- [ ] **PATH-02**: SKILL.md preflight check reads `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue` (not hardcoded `.claude/skills/` path)
-- [ ] **PATH-03**: All ~18 protocol file references in SKILL.md use `$CLAUDE_PLUGIN_ROOT/socrates/protocols/` prefix
+- [x] **PATH-01**: User can invoke `/socrates` after plugin install and all protocol file reads resolve correctly via `$CLAUDE_PLUGIN_ROOT`
+- [x] **PATH-02**: SKILL.md preflight check reads `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue` (not hardcoded `.claude/skills/` path)
+- [x] **PATH-03**: All ~18 protocol file references in SKILL.md use `$CLAUDE_PLUGIN_ROOT/socrates/protocols/` prefix
 
 ### Build & Distribution
 
@@ -124,9 +124,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLUG-02 | Phase 9 | Pending |
 | PLUG-03 | Phase 6 | Complete |
 | PLUG-04 | Phase 6 | Complete |
-| PATH-01 | Phase 6 | Pending |
-| PATH-02 | Phase 6 | Pending |
-| PATH-03 | Phase 6 | Pending |
+| PATH-01 | Phase 6 | Complete |
+| PATH-02 | Phase 6 | Complete |
+| PATH-03 | Phase 6 | Complete |
 | BLDG-01 | Phase 7 | Pending |
 | BLDG-02 | Phase 7 | Pending |
 | BLDG-03 | Phase 7 | Pending |
