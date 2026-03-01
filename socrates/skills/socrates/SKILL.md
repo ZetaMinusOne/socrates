@@ -8,13 +8,11 @@ allowed-tools: Read
 
 ## Preflight
 
-Read the file at path: `.claude/skills/socrates/protocols/dialectics.opt.cue`
+Read the file at path: `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue`
 
 If the file is not found or empty, respond exactly:
-"Setup required: the dialectics submodule is not initialized or protocol files have not been generated.
-Run: git submodule update --init --recursive
-Then check that .claude/skills/socrates/protocols/dialectics.opt.cue exists.
-If missing, regenerate the optimized protocol files from the dialectics submodule."
+"Setup required: protocol files are missing or unreadable. This usually means the plugin was not installed correctly.
+Try reinstalling the plugin, or check that the protocols/ directory exists within the plugin root."
 Stop here. Do not proceed.
 
 ## Input
@@ -35,38 +33,38 @@ Before routing, scan `$ARGUMENTS` for recognized flags: `--structured` and `--re
 Respond: "Please describe a problem for me to analyze."
 Stop here. Do not proceed with routing or execution.
 
-**Conditional recording.cue read:** When `--record` is detected (with or without `--structured`), read `.claude/skills/socrates/dialectics/governance/recording.cue` to load the `#Record` type definition. Do NOT read recording.cue when `--record` is absent — follow the progressive disclosure pattern.
+**Conditional recording.cue read:** When `--record` is detected (with or without `--structured`), read `$CLAUDE_PLUGIN_ROOT/socrates/dialectics/governance/recording.cue` to load the `#Record` type definition. Do NOT read recording.cue when `--record` is absent — follow the progressive disclosure pattern.
 
 ## Protocol Files
 
-Optimized (pre-stripped) protocol files are in `.claude/skills/socrates/protocols/`. Read ONLY the file for the selected protocol. Never load all protocols at once.
+Optimized (pre-stripped) protocol files are in `$CLAUDE_PLUGIN_ROOT/socrates/protocols/`. Read ONLY the file for the selected protocol. Never load all protocols at once.
 
 **Kernel and governance:**
-- Kernel primitives: `.claude/skills/socrates/protocols/dialectics.opt.cue`
-- Routing logic: `.claude/skills/socrates/protocols/routing.opt.cue`
+- Kernel primitives: `$CLAUDE_PLUGIN_ROOT/socrates/protocols/dialectics.opt.cue`
+- Routing logic: `$CLAUDE_PLUGIN_ROOT/socrates/protocols/routing.opt.cue`
 
 **Adversarial protocols (6):**
-- `.claude/skills/socrates/protocols/adversarial/atp.opt.cue` — Analogy Transfer Protocol
-- `.claude/skills/socrates/protocols/adversarial/cbp.opt.cue` — Concept Boundary Protocol
-- `.claude/skills/socrates/protocols/adversarial/cdp.opt.cue` — Construct Decomposition Protocol
-- `.claude/skills/socrates/protocols/adversarial/cffp.opt.cue` — Constraint-First Formalization Protocol
-- `.claude/skills/socrates/protocols/adversarial/emp.opt.cue` — Emergence Mapping Protocol
-- `.claude/skills/socrates/protocols/adversarial/hep.opt.cue` — Hypothesis Elimination Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/atp.opt.cue` — Analogy Transfer Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/cbp.opt.cue` — Concept Boundary Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/cdp.opt.cue` — Construct Decomposition Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/cffp.opt.cue` — Constraint-First Formalization Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/emp.opt.cue` — Emergence Mapping Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/hep.opt.cue` — Hypothesis Elimination Protocol
 
 **Evaluative protocols (6):**
-- `.claude/skills/socrates/protocols/evaluative/aap.opt.cue` — Assumption Audit Protocol
-- `.claude/skills/socrates/protocols/evaluative/cgp.opt.cue` — Canonical Governance Protocol
-- `.claude/skills/socrates/protocols/evaluative/ifa.opt.cue` — Implementation Fidelity Audit
-- `.claude/skills/socrates/protocols/evaluative/ovp.opt.cue` — Observation Validation Protocol
-- `.claude/skills/socrates/protocols/evaluative/ptp.opt.cue` — Prioritization Triage Protocol
-- `.claude/skills/socrates/protocols/evaluative/rcp.opt.cue` — Reconciliation Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/aap.opt.cue` — Assumption Audit Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/cgp.opt.cue` — Canonical Governance Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/ifa.opt.cue` — Implementation Fidelity Audit
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/ovp.opt.cue` — Observation Validation Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/ptp.opt.cue` — Prioritization Triage Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/rcp.opt.cue` — Reconciliation Protocol
 
 **Exploratory protocols (1):**
-- `.claude/skills/socrates/protocols/exploratory/adp.opt.cue` — Adversarial Design Protocol
+- `$CLAUDE_PLUGIN_ROOT/socrates/protocols/exploratory/adp.opt.cue` — Adversarial Design Protocol
 
 ## Routing
 
-Read the file at path: `.claude/skills/socrates/protocols/routing.opt.cue`
+Read the file at path: `$CLAUDE_PLUGIN_ROOT/socrates/protocols/routing.opt.cue`
 
 **Protocol full names:**
 - AAP: Assumption Audit Protocol
@@ -177,7 +175,7 @@ Never force a bad fit — an unroutable problem gets the unroutable handler, not
 
 ### Adversarial protocols (CFFP, CDP, CBP, HEP, ATP, EMP)
 
-Read the selected protocol's `.opt.cue` file (path already known from routing: `.claude/skills/socrates/protocols/adversarial/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Do not hard-code phase sequences — let the loaded schema's type definitions drive what each phase requires.
+Read the selected protocol's `.opt.cue` file (path already known from routing: `$CLAUDE_PLUGIN_ROOT/socrates/protocols/adversarial/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Do not hard-code phase sequences — let the loaded schema's type definitions drive what each phase requires.
 
 **Phase 1 — Starting conditions:** Establish the phase-appropriate starting material from the protocol's Phase1 type:
 - CFFP: invariants (each testable, structural, with an invariant class)
@@ -218,7 +216,7 @@ Special note for CDP: Phase6 produces `cffp_instructions` — conclude by tellin
 
 ### Evaluative protocols (AAP, IFA, RCP, CGP, PTP, OVP)
 
-Read the selected protocol's `.opt.cue` file (path: `.claude/skills/socrates/protocols/evaluative/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Evaluative protocols follow a simpler arc than adversarial: establish the subject → define evaluation criteria → assess the subject against those criteria → deliver a verdict. There are no revision loops. A failed or indeterminate verdict is the terminal result — report it and stop.
+Read the selected protocol's `.opt.cue` file (path: `$CLAUDE_PLUGIN_ROOT/socrates/protocols/evaluative/{acronym}.opt.cue`). Execute the phases in order as defined by the schema. Evaluative protocols follow a simpler arc than adversarial: establish the subject → define evaluation criteria → assess the subject against those criteria → deliver a verdict. There are no revision loops. A failed or indeterminate verdict is the terminal result — report it and stop.
 
 Render each phase as a section header followed by narrative prose, using the same structure as adversarial protocols. Eager gate enforcement applies: if a phase requires at least one item and none can be established from the user's problem, stop before the next phase, show completed work, state the gate diagnosis, and give actionable suggestions.
 
@@ -234,7 +232,7 @@ Render each phase as a section header followed by narrative prose, using the sam
 
 ### Exploratory protocol (ADP)
 
-Read the protocol file at `.claude/skills/socrates/protocols/exploratory/adp.opt.cue`. ADP's model is distinct from both adversarial and evaluative families: rather than eliminating candidates or auditing a subject, it constructs a design space through structured multi-persona debate.
+Read the protocol file at `$CLAUDE_PLUGIN_ROOT/socrates/protocols/exploratory/adp.opt.cue`. ADP's model is distinct from both adversarial and evaluative families: rather than eliminating candidates or auditing a subject, it constructs a design space through structured multi-persona debate.
 
 **Execution steps:**
 
@@ -299,7 +297,7 @@ Early termination appends: `"early_termination": {"reason": "...", "stopped_at":
 
 ### Record output (`--record`)
 
-Project the completed run into a `#Record` JSON object from the already-loaded `.claude/skills/socrates/dialectics/governance/recording.cue`. Same output-only JSON rule applies.
+Project the completed run into a `#Record` JSON object from the already-loaded `$CLAUDE_PLUGIN_ROOT/socrates/dialectics/governance/recording.cue`. Same output-only JSON rule applies.
 
 **Field population:**
 - `record_id`: `"rec-{protocol_lower}-{YYYYMMDD}-{4-char-hex}"` (e.g., `"rec-cffp-20260228-a7f3"`)
