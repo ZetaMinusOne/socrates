@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** - Phases 1-5 (shipped 2026-02-28)
-- 🚧 **v1.1 Plugin Distribution** - Phases 6-9 (in progress)
+- ✅ **v1.1 Plugin Distribution** - Phases 6-9 (shipped 2026-03-02)
 
 ## Phases
 
@@ -86,14 +86,14 @@ Plans:
 
 </details>
 
-### 🚧 v1.1 Plugin Distribution (In Progress)
+### ✅ v1.1 Plugin Distribution (SHIPPED 2026-03-02)
 
 **Milestone Goal:** Make Socrates installable via `/plugin` from a marketplace — single-repo, pre-built protocol files, zero consumer setup.
 
 - [x] **Phase 6: Plugin Scaffold and Path Migration** - Plugin manifest created, directory restructured, all SKILL.md path references migrated to `$CLAUDE_PLUGIN_ROOT` (completed 2026-03-01)
 - [x] **Phase 7: Pre-Built Protocol Files** - All 15 `.opt.cue` files committed to git and verified present after a clean plugin install (completed 2026-03-01)
 - [x] **Phase 8: Session Hook** - SessionStart hook injects SKILL.md frontmatter as additionalContext on startup/resume/clear; extensionless script with BASH_SOURCE[0] path derivation (completed 2026-03-01)
-- [ ] **Phase 9: Marketplace Wiring and End-to-End Validation** - `marketplace.json` published, full install flow verified via `/plugin marketplace add` and `/plugin install`
+- [x] **Phase 9: Marketplace Wiring and End-to-End Validation** - `marketplace.json` published, full install flow verified via `/plugin marketplace add` and `/plugin install` (completed 2026-03-02)
 - [x] **Phase 10: Repository Cleanup and Phase 6 Verification** - Fix submodule gitlink, remove old paths from HEAD, create Phase 6 VERIFICATION.md (gap closure) (completed 2026-03-01)
 
 ## Phase Details
@@ -148,8 +148,8 @@ Plans:
   4. After the same install, user runs `/socrates --record <problem>` and the `$CLAUDE_PLUGIN_ROOT/governance/recording.opt.cue` file is readable and `--record` output is valid
 **Plans**: 2 plans
 Plans:
-- [ ] 09-01-PLAN.md — Create marketplace.json, extend build pipeline for recording.cue, fix SKILL.md path prefix bug, remove plugin.json version
-- [ ] 09-02-PLAN.md — Push to GitHub and run real end-to-end install validation
+- [x] 09-01-PLAN.md — Create marketplace.json, extend build pipeline for recording.cue, fix SKILL.md path prefix bug, remove plugin.json version
+- [x] 09-02-PLAN.md — Push to GitHub and run real end-to-end install validation
 
 ### Phase 10: Repository Cleanup and Phase 6 Verification
 **Goal**: Repository state is clean for downstream phases — submodule gitlink registered at correct path, old paths removed from HEAD, and Phase 6 requirements formally verified so they count as satisfied
@@ -181,5 +181,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 10 �
 | 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Complete | 2026-03-01 |
 | 7. Pre-Built Protocol Files | v1.1 | 1/1 | Complete | 2026-03-01 |
 | 8. Session Hook | v1.1 | 1/1 | Complete | 2026-03-01 |
-| 9. Marketplace Wiring and E2E Validation | 1/2 | In Progress|  | - |
+| 9. Marketplace Wiring and E2E Validation | v1.1 | 2/2 | Complete | 2026-03-02 |
 | 10. Repository Cleanup and Phase 6 Verification | v1.1 | Complete    | 2026-03-01 | 2026-03-01 |
