@@ -1,0 +1,17 @@
+{
+  "name": "socrates-marketplace",
+  "owner": {
+    "name": "zetaminusone"
+  },
+  "plugins": [
+    {
+      "name": "socrates-skill",
+      "source": "./socrates",
+      "description": "Apply rigorous philosophical reasoning to any problem — 13 protocols for stress-testing arguments, auditing assumptions, and mapping possibilities",
+      "version": "0.1.0",
+      "homepage": "https://zetaminusone.com",
+      "repository": "https://github.com/zetaminusone/socrates",
+      "tags": ["reasoning", "dialectics", "philosophy"]
+    }
+  ]
+}

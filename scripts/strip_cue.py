@@ -26,6 +26,7 @@ BASE_DIR = os.path.join(os.path.dirname(SCRIPT_DIR), 'socrates')
 FILE_MAP = [
     ("dialectics/dialectics.cue",                          "protocols/dialectics.opt.cue"),
     ("dialectics/governance/routing.cue",                  "protocols/routing.opt.cue"),
+    ("dialectics/governance/recording.cue",                "governance/recording.opt.cue"),
     ("dialectics/protocols/adversarial/atp.cue",           "protocols/adversarial/atp.opt.cue"),
     ("dialectics/protocols/adversarial/cbp.cue",           "protocols/adversarial/cbp.opt.cue"),
     ("dialectics/protocols/adversarial/cdp.cue",           "protocols/adversarial/cdp.opt.cue"),
