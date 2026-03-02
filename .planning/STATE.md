@@ -95,6 +95,7 @@ Recent decisions affecting current work:
 - [Phase 09-01]: [09-01 FIXED] SKILL.md  path prefix corrected: removed /socrates/ segment so paths resolve correctly after marketplace install (21 protocol paths + 2 recording governance paths)
 - [Phase 09-02 CONFIRMED]: Real GitHub install via /plugin marketplace add + /plugin install works with zero manual setup — two-command install confirmed against zetaminusone/socrates
 - [Phase 09-02 RESOLVED]: Bug #16538 hookSpecificOutput.additionalContext delivery from plugin-based hooks — empirically confirmed working; session hook fires on /clear without manual SKILL.md read
+- [quick-1-01]: Plugin renamed from socrates-skill to socrates-cc; marketplace renamed from socrates-marketplace to socrates; install command is now /plugin install socrates-cc@socrates
 
 ### Pending Todos
 
@@ -110,5 +111,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Phase 9 Plan 02 complete — v1.1 Plugin Distribution milestone complete; all 10 phases done
+Stopped at: quick-1-01 complete — plugin renamed to socrates-cc, marketplace renamed to socrates
 Resume file: None
