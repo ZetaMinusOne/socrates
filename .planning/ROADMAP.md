@@ -142,11 +142,14 @@ Plans:
 **Depends on**: Phase 8
 **Requirements**: PLUG-01, PLUG-02
 **Success Criteria** (what must be TRUE):
-  1. User runs `/plugin marketplace add riverline-labs/socrates` and the marketplace is registered in Claude Code
-  2. User runs `/plugin install socrates-skill@socrates` (or the confirmed correct invocation form) and the plugin installs cleanly — no submodule init, no build step, no manual path configuration
+  1. User runs `/plugin marketplace add zetaminusone/socrates` and the marketplace is registered in Claude Code
+  2. User runs `/plugin install socrates-skill@socrates-marketplace` and the plugin installs cleanly — no submodule init, no build step, no manual path configuration
   3. After a real GitHub-sourced install (not `--plugin-dir`), user runs `/socrates <problem>` and receives a complete narrative response with correct protocol routing and execution
-  4. After the same install, user runs `/socrates --record <problem>` and the `$CLAUDE_PLUGIN_ROOT/dialectics/governance/recording.cue` file is readable and `--record` output is valid
-**Plans**: TBD
+  4. After the same install, user runs `/socrates --record <problem>` and the `$CLAUDE_PLUGIN_ROOT/governance/recording.opt.cue` file is readable and `--record` output is valid
+**Plans**: 2 plans
+Plans:
+- [ ] 09-01-PLAN.md — Create marketplace.json, extend build pipeline for recording.cue, fix SKILL.md path prefix bug, remove plugin.json version
+- [ ] 09-02-PLAN.md — Push to GitHub and run real end-to-end install validation
 
 ### Phase 10: Repository Cleanup and Phase 6 Verification
 **Goal**: Repository state is clean for downstream phases — submodule gitlink registered at correct path, old paths removed from HEAD, and Phase 6 requirements formally verified so they count as satisfied
@@ -178,5 +181,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 10 �
 | 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Complete | 2026-03-01 |
 | 7. Pre-Built Protocol Files | v1.1 | 1/1 | Complete | 2026-03-01 |
 | 8. Session Hook | v1.1 | 1/1 | Complete | 2026-03-01 |
-| 9. Marketplace Wiring and E2E Validation | v1.1 | 0/? | Not started | - |
+| 9. Marketplace Wiring and E2E Validation | v1.1 | 0/2 | Planned | - |
 | 10. Repository Cleanup and Phase 6 Verification | v1.1 | Complete    | 2026-03-01 | 2026-03-01 |
