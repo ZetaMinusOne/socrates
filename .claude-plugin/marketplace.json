@@ -1,11 +1,11 @@
 {
-  "name": "socrates-marketplace",
+  "name": "socrates",
   "owner": {
     "name": "zetaminusone"
   },
   "plugins": [
     {
-      "name": "socrates-skill",
+      "name": "socrates-cc",
       "source": "./socrates",
       "description": "Apply rigorous philosophical reasoning to any problem — 13 protocols for stress-testing arguments, auditing assumptions, and mapping possibilities",
       "version": "0.1.0",
