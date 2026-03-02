@@ -181,5 +181,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 10 �
 | 6. Plugin Scaffold and Path Migration | v1.1 | 2/2 | Complete | 2026-03-01 |
 | 7. Pre-Built Protocol Files | v1.1 | 1/1 | Complete | 2026-03-01 |
 | 8. Session Hook | v1.1 | 1/1 | Complete | 2026-03-01 |
-| 9. Marketplace Wiring and E2E Validation | v1.1 | 0/2 | Planned | - |
+| 9. Marketplace Wiring and E2E Validation | 1/2 | In Progress|  | - |
 | 10. Repository Cleanup and Phase 6 Verification | v1.1 | Complete    | 2026-03-01 | 2026-03-01 |

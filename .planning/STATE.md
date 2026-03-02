@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Plugin Distribution
 status: unknown
-last_updated: "2026-03-01T23:51:33.542Z"
+last_updated: "2026-03-02T01:12:41.979Z"
 progress:
-  total_phases: 9
+  total_phases: 10
   completed_phases: 9
-  total_plans: 12
-  completed_plans: 12
+  total_plans: 14
+  completed_plans: 13
 ---
 
 # Project State
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-01)
 
 **Core value:** Users get rigorous, protocol-driven reasoning on any problem without needing to know which dialectic method to apply
-**Current focus:** v1.1 Plugin Distribution — Phase 8: SessionStart Hook (COMPLETE)
+**Current focus:** v1.1 Plugin Distribution — Phase 9: Marketplace Wiring and E2E Validation (In Progress)
 
 ## Current Position
 
-Phase: 8 of 10 (SessionStart Hook) — COMPLETE
-Plan: 1 of 1 complete in current phase
-Status: Phase 8 complete — hooks.json, session-start, .gitattributes created; all 7 verification checks passed
-Last activity: 2026-03-01 — 08-01 complete: SessionStart hook created with BASH_SOURCE[0] path derivation, awk frontmatter extraction, silent failure design; all requirements HOOK-01, HOOK-02, HOOK-03 met
+Phase: 9 of 10 (Marketplace Wiring and E2E Validation) — In Progress
+Plan: 1 of 2 complete in current phase
+Status: Phase 9 Plan 01 complete — marketplace.json created, plugin.json version removed, recording.opt.cue pre-built, SKILL.md paths corrected; PLUG-01 and PLUG-02 met
+Last activity: 2026-03-02 — 09-01 complete: marketplace.json with socrates-skill entry, strip_cue.py extended to 16 files, all 23 SKILL.md path occurrences corrected (zero $CLAUDE_PLUGIN_ROOT/socrates/ remaining)
 
-Progress: [█████████░] 90% (v1.0 complete, Phases 6, 7, 8, 10 done)
+Progress: [█████████░] 93% (v1.0 complete, Phases 6, 7, 8, 9-P1, 10 done)
 
 ## Performance Metrics
 
@@ -44,7 +44,7 @@ Progress: [█████████░] 90% (v1.0 complete, Phases 6, 7, 8, 1
 | v1.1 Phases 6-10 | 5/? | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 06-02 complete (~8 min); 07-01 complete (~5 min); 10-01 complete (~15 min); 08-01 complete (~3 min)
+- Last 5 plans: 07-01 complete (~5 min); 10-01 complete (~15 min); 08-01 complete (~3 min); 09-01 complete (~2 min)
 - Trend: Stable
 
 **Execution Log:**
@@ -56,6 +56,7 @@ Progress: [█████████░] 90% (v1.0 complete, Phases 6, 7, 8, 1
 | Phase 07 P01 | 5min | 2 tasks | 17 files |
 | Phase 10 P01 | 15min | 2 tasks | 2 files (+18 index entries) |
 | Phase 08 P01 | 3min | 2 tasks | 3 files (+1 .git fix) |
+| Phase 09 P01 | 2min | 2 tasks | 6 files |
 
 *Updated after each plan completion*
 
@@ -87,6 +88,10 @@ Recent decisions affecting current work:
 - [08-01] awk counter used for YAML frontmatter extraction (not sed) — macOS BSD sed has different syntax from GNU sed; awk is POSIX-portable
 - [08-01] socrates/hooks/* used in .gitattributes (not hooks/*) — repo root is one level above plugin root socrates/
 - [08-01] Fixed stale submodule .git file: socrates/dialectics/.git had ../../../../ relative path (resolves to /Users/javier/), corrected to ../../ (resolves to repo root)
+- [Phase 09-01]: marketplace.json at repo root with source: ./socrates — single-repo marketplace layout for git-only distribution
+- [Phase 09-01]: version field removed from plugin.json — marketplace.json is sole version authority for relative-path plugins
+- [Phase 09-01]: socrates/governance/ directory created for pre-built governance files (recording.opt.cue) separate from protocols/
+- [Phase 09-01]: [09-01 FIXED] SKILL.md  path prefix corrected: removed /socrates/ segment so paths resolve correctly after marketplace install (21 protocol paths + 2 recording governance paths)
 
 ### Pending Todos
 
@@ -101,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-01
-Stopped at: Phase 8 complete (1 of 1 plans done) — HOOK-01, HOOK-02, HOOK-03 requirements met
+Last session: 2026-03-02
+Stopped at: Phase 9 Plan 01 complete (1 of 2 plans done) — PLUG-01, PLUG-02 requirements met
 Resume file: None
